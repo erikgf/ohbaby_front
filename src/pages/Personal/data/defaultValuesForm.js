@@ -1,0 +1,15 @@
+export const defaultValuesForm = {
+    id_tipo_documento: "D",
+    numero_documento: "",
+    codigo_unico: "",
+    apellido_paterno: "",
+    apellido_materno: "",
+    nombres: "",
+    direccion: "",
+    fecha_nacimiento: "",
+    departamento_ubigeo: "",
+    provincia_ubigeo: "",
+    distrito_ubigeo: "",
+    pais: "PE",
+    contratos : []
+};

@@ -1,0 +1,123 @@
+.Login_mainContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.Login_cardContent{
+    display: flex;
+    min-width: 1150px;
+}
+
+.Login_boxImg{
+    width: 700px;
+    min-height: 40vh;
+    display: flex;
+    align-items: center;
+    padding: 48px 32px;
+}
+
+.Login_boxImg img {
+    width:100%;
+}
+
+.Login_boxForm{
+    display: flex;
+    flex-direction: column;
+    padding: 48px 36px 12px;
+    min-width: 320px;
+}
+
+.Login_subtitle{
+    color: var(--primary-color);
+}
+
+.Login_form{
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+
+@media (max-width: 1000px) {
+    .Login_cardContent{
+        min-width: 78px;
+    }
+
+    .Login_boxImg{
+        width: 480px;
+        padding: 32px 16px;
+    }
+
+    .Login_boxForm{
+        display: flex;
+        flex-direction: column;
+        padding: 48px 20px 10px;
+        min-width: 320px;
+    }
+    
+}
+
+@media (max-width: 768px) {
+    .Login_cardContent{
+        min-width: 500px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .Login_boxImg{
+        width: 400px;
+        padding: 32px 16px;
+        min-height: 10vh;
+    }
+
+    .Login_boxForm{
+        display: flex;
+        flex-direction: column;
+        padding: 48px 20px 10px;
+        min-width: 320px;
+    }
+}
+
+
+@media (max-width: 440px) {
+    .Login_card{
+        width: 100%;
+    }
+
+    .Login_cardContent{
+        min-width: 0px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .Login_boxImg{
+        max-width: 280px;
+        padding: 8px;
+        min-height: 0vh;
+    }
+
+    .Login_boxForm{
+        display: flex;
+        flex-direction: column;
+        padding: 24px 12px 0px;
+        min-width: 300px;
+    }
+
+    .Login_subtitle{
+       padding-left: 16px;
+    }
+
+    .Login_form{
+        padding: 16px;
+        display: flex;
+        gap: 4px;
+    }
+    
+}

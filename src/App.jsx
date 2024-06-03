@@ -1,0 +1,37 @@
+import { Route, Routes } from 'react-router-dom';
+import { RequireAuth } from './components';
+import './App.css';
+import { Horario, HorarioPersonal, Login, MarcarAsistencia, Personal, Principal } from './pages';
+import { useEffect } from 'react';
+import useNotification from './hooks/useNotification';
+import { useUI } from './hooks';
+
+function App() {
+  const {  mensaje, onLimpiarMensaje } = useUI();
+  const notificar = useNotification();
+
+  useEffect(()=>{
+      if (!Boolean(mensaje)) return;
+      notificar(mensaje);
+      return () => {
+        onLimpiarMensaje();
+      }
+  }, [mensaje]);
+
+  return   <Routes>
+              {/* Public */}
+              <Route path="/" element={<Login />} />
+              {/* Private */}
+              <Route element = {<RequireAuth/>}>
+                <Route path="/main" element={<Principal />} />
+                <Route path="/personal" element={<Personal />} />
+                <Route path="/horarios" element={<Horario />} />
+                <Route path="/horarios-personal" element={<HorarioPersonal />} />
+                <Route path="/marcar-asistencia" element={<MarcarAsistencia />} />
+              </Route>
+              { /* Catch all */}
+              <Route path="*" element={<Login />} />
+            </Routes>
+}
+
+export default App

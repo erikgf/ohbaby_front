@@ -1,0 +1,69 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+
+  --primary-color : #080e58;
+  --secondary-color: #fe141d;
+  --primary-color-light: #141d84;
+  --terciary-color :#958482;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+}
+
+body {
+  background: linear-gradient(60deg, #080e58, #3fa2db, #217fb0, #141d84, #141d84);
+  background-size: 1000% 1000%;
+
+  -webkit-animation: AnimationName 12s ease infinite;
+  -moz-animation: AnimationName 12s ease infinite;
+  animation: AnimationName 12s ease infinite;
+}
+
+@-webkit-keyframes AnimationName {
+  0%{background-position:0% 60%}
+  50%{background-position:100% 41%}
+  100%{background-position:0% 60%}
+}
+@-moz-keyframes AnimationName {
+  0%{background-position:0% 60%}
+  50%{background-position:100% 41%}
+  100%{background-position:0% 60%}
+}
+@keyframes AnimationName {
+  0%{background-position:0% 60%}
+  50%{background-position:100% 41%}
+  100%{background-position:0% 60%}
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 96.5vh;
+  height: 100vh;
+}
+
+#root{
+  max-width: 1280px;
+  margin: 0 auto;
+  height: 100vh;
+  background-color: white;
+  background-image: url("assets/logo-main-ma.png");
+  background-repeat:no-repeat;
+  background-position: center center;
+}

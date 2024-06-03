@@ -1,0 +1,9 @@
+export const Response = {
+    HTTP_ERROR_NETWORK : "ERR_NETWORK",
+    HTTP_OK : 200,
+    HTTP_OK_CREADO : 201,
+    HTTP_NOENCONTRADO : 404,
+    HTTP_NOAUTORIZADO : 401,
+    HTTP_NOVALIDO : 422,
+    HTTP_ERROR : 500,
+};
