@@ -39,6 +39,11 @@ const mainMenu = [
                 icon: TouchAppIcon
             },
             {
+                name: "Registrar Asistencia Manual",
+                url: "/registrar-asistencia-manual",
+                icon: TouchAppIcon
+            },
+            {
                 name: "Marcar Asistencia",
                 url: "/marcar-asistencia",
                 icon: TouchAppIcon,
