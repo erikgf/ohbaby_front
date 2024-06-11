@@ -17,7 +17,7 @@ export const RegistrarAsitenciaManual = () => {
             return;
         }
 
-        if(codigo.length >= 12){
+        if(codigo.length >= 11){
             consultarResultado({codigoBarra: codigo});
             return;
         }
