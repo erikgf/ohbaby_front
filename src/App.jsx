@@ -35,5 +35,4 @@ function App() {
               <Route path="*" element={<Login />} />
             </Routes>
 }
-
 export default App
