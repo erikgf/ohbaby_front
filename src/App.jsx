@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 import { RequireAuth } from './components';
 import './App.css';
-import { Horario, HorarioPersonal, Login, MarcarAsistencia, Personal, Principal, RegistrarAsitenciaManual } from './pages';
+import { Horario, HorarioPersonal, ImprimirAsistenciaManual, Login, MarcarAsistencia, Personal, Principal, RegistrarAsitenciaManual } from './pages';
 import { useEffect } from 'react';
 import useNotification from './hooks/useNotification';
 import { useUI } from './hooks';
@@ -29,6 +29,7 @@ function App() {
                 <Route path="/horarios-personal" element={<HorarioPersonal />} />
                 <Route path="/marcar-asistencia" element={<MarcarAsistencia />} />
                 <Route path="/registrar-asistencia-manual" element={<RegistrarAsitenciaManual />} />
+                <Route path="/imprimir-asistencia-manual" element={<ImprimirAsistenciaManual />} />
               </Route>
               { /* Catch all */}
               <Route path="*" element={<Login />} />

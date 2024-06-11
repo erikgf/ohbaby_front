@@ -11,7 +11,8 @@ import {
     MdOpenInBrowser as OpenInBrowserIcon,
     MdPinch as PinchIcon,
     MdEvent as EventIcon,
-    MdAccountCircle as AccountCircleIcon
+    MdAccountCircle as AccountCircleIcon,
+    MdPrint as PrintIcon
 } from 'react-icons/md';
 
 const mainMenu = [
@@ -36,7 +37,12 @@ const mainMenu = [
             {
                 name: "Asignar Horarios a Personal ",
                 url: "/horarios-personal",
-                icon: TouchAppIcon
+                icon: EventIcon
+            },
+            {
+                name: "Imprimir Asistencia Manual",
+                url: "/imprimir-asistencia-manual",
+                icon: PrintIcon
             },
             {
                 name: "Registrar Asistencia Manual",

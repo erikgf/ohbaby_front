@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { setMessageError } from "../../store/ui/uiSlice";
 import { useDispatch } from "react-redux";
 import { consultarAsistenciaManual } from "../../services/registrarAsistenciaManual/consultarAsistenciaManual";
 import { submitAsistenciaManual } from "../../services/registrarAsistenciaManual/submitAsistenciaManual";
 
+const SEPARADOR = "_";
 
 export const useRegistrarAsistenciaManual = () =>{
     const dispatch = useDispatch();
@@ -14,7 +15,7 @@ export const useRegistrarAsistenciaManual = () =>{
     const [ cargandoGuardar, setCargandoGuardar] = useState(false);
 
     const consultarResultado = async ({codigoBarra}) => {
-        const arregloStringCodigoBarra = codigoBarra.split("|");
+        const arregloStringCodigoBarra = codigoBarra.split(SEPARADOR);
 
         setCargando( true );
         try {
