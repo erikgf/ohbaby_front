@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { consultarAsistenciaManual } from "../../services/registrarAsistenciaManual/consultarAsistenciaManual";
 import { submitAsistenciaManual } from "../../services/registrarAsistenciaManual/submitAsistenciaManual";
 
-const SEPARADOR = "|";
+const SEPARADOR = ".";
 
 export const useRegistrarAsistenciaManual = () =>{
     const dispatch = useDispatch();
