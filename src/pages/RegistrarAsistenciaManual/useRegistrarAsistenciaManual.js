@@ -13,10 +13,12 @@ export const useRegistrarAsistenciaManual = () =>{
     const [ultimoRegistro, setUltimoRegistro] = useState(null);
     const [ cargando, setCargando] = useState(false);
     const [ cargandoGuardar, setCargandoGuardar] = useState(false);
+    const [ isError, setIsError ] = useState(false);
 
-    const consultarResultado = async ({codigoBarra}) => {
+    const consultarResultado = async ({codigoBarra}, imperativeFn) => {
         const arregloStringCodigoBarra = codigoBarra.split(SEPARADOR);
 
+        setIsError(false);
         setCargando( true );
         try {
             
@@ -34,11 +36,15 @@ export const useRegistrarAsistenciaManual = () =>{
 
                 setResultado(data);
                 setCodigo("");
+                if (imperativeFn){
+                    imperativeFn();
+                }
             }
 
         } catch (error) {
             dispatch(setMessageError(error));
             setCodigo("");
+            setIsError(true);
         } finally{
             setCargando(false);
         }
@@ -50,11 +56,12 @@ export const useRegistrarAsistenciaManual = () =>{
         });
     };
 
-    const guardarRegistro = async () => {
+    const guardarRegistro = async (fnImperative) => {
         if (!Boolean(resultado?.ok)){
             return false;
         }
 
+        setIsError(false);
         setCargandoGuardar( true );
         try {   
 
@@ -72,33 +79,18 @@ export const useRegistrarAsistenciaManual = () =>{
             if (data){
                 setResultado(null);
                 setUltimoRegistro(`${data.nombre_empleado} a las  ${data.fecha_hora_registrado}`);
+                if (fnImperative){
+                    fnImperative();
+                }
             }
 
         } catch (error) {
             dispatch(setMessageError(error));
+            setIsError(true);
         } finally{
             setCargandoGuardar(false);
         }
     };
-
-    /*
-    useEffect(()=>{
-        let timer;
-        if(Boolean(resultado)){
-            timer = setTimeout(() => {
-                setResultado(null);
-            }, TIEMPO_MOSTRAR_MENSAJE_MS);            
-        }
-
-        return () => {
-            if ( timer ){
-                clearTimeout(timer);
-                timer = null;
-            }
-        }
-
-    }, [resultado]);
-    */
 
     return {
         codigo, 
@@ -106,6 +98,7 @@ export const useRegistrarAsistenciaManual = () =>{
         cargando,
         cargandoGuardar,
         ultimoRegistro,
+        isError,
         setCodigo,
         consultarResultado,
         modificarHoras,

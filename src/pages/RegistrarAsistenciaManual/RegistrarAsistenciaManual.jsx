@@ -1,4 +1,4 @@
-import { Alert, Box, Card, CardContent, Container, Divider, Grid, LinearProgress, Stack, TextField, Typography } from "@mui/material";
+import { Alert, Box, Card, CardContent, Container, Divider, Grid, LinearProgress, TextField, Typography } from "@mui/material";
 import { useEffect, useRef } from "react";
 import { MdSave as SaveIcon } from "react-icons/md";
 import { useRegistrarAsistenciaManual } from "./useRegistrarAsistenciaManual";
@@ -7,21 +7,24 @@ import { LoadingButton } from "@mui/lab";
 
 export const RegistrarAsitenciaManual = () => {
     const inputRef = useRef(null);
-    const { cargando, resultado, codigo, ultimoRegistro,
+    const inputHoraEntrada = useRef(null);
+    const { cargando, resultado, codigo, ultimoRegistro, isError,
             consultarResultado, modificarHoras, guardarRegistro,
             setCodigo } = useRegistrarAsistenciaManual();
 
     useEffect(()=>{
-        if (codigo === ""){
+        if (codigo === "" && isError){
             inputRef.current.focus();
             return;
         }
 
         if(codigo.length >= 11){
-            consultarResultado({codigoBarra: codigo});
+            consultarResultado({codigoBarra: codigo}, ()=>{
+                inputHoraEntrada.current.focus();
+            });
             return;
         }
-    }, [codigo]);
+    }, [codigo, isError]);
 
     return <Container sx={{pt: 3}}>
             <Grid container spacing={2}>
@@ -49,7 +52,9 @@ export const RegistrarAsitenciaManual = () => {
                     <Card>
                         <CardContent component={"form"} onSubmit={(e)=>{
                             e.preventDefault();
-                            guardarRegistro();
+                            guardarRegistro(()=>{
+                                inputRef.current.focus();
+                            });
                         }}>
                             <Grid container spacing={2}>
                                 <Grid item sm={12} md={3}>
@@ -67,6 +72,7 @@ export const RegistrarAsitenciaManual = () => {
                                     <Typography variant="body2" fontWeight={"bold"}>Mañana</Typography>
                                     <Box display={"flex"} gap={2}>
                                         <TextField 
+                                            inputRef={inputHoraEntrada}
                                             label="Hora Entrada"
                                             margin="dense"
                                             size="small"
