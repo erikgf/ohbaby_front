@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { consultarAsistenciaManual } from "../../services/registrarAsistenciaManual/consultarAsistenciaManual";
 import { submitAsistenciaManual } from "../../services/registrarAsistenciaManual/submitAsistenciaManual";
 
-const SEPARADOR = "_";
+const SEPARADOR = "|";
 
 export const useRegistrarAsistenciaManual = () =>{
     const dispatch = useDispatch();
@@ -23,8 +23,9 @@ export const useRegistrarAsistenciaManual = () =>{
             if (arregloStringCodigoBarra.length != 2){
                 throw "Problema al leer código de barra, formato no esperado.";
             }
+
             const [ fecha, codigoUnico ] = arregloStringCodigoBarra;
-            const data = await consultarAsistenciaManual({ fecha, codigoUnico})
+            const data = await consultarAsistenciaManual({ fecha, codigoUnico});
 
             if (data){
                 if (!Boolean(data?.ok)){
