@@ -51,28 +51,26 @@ export const ListaPersonal = () => {
                         onActions = {[
                             {
                                 inRows: false, inToolbar: true, noSelection: true, onOnlySelection: false,
-                                whenLoading: false,
                                 onClick : () => {onListar()},
                                 title : 'Actualizar',
                                 icon : <RefreshIcon  style={{color: styles.colorButtons.green}}/>
                             },
                             {
                                 inRows: false, inToolbar: true, noSelection: true, onOnlySelection: false,
-                                whenLoading: false,
                                 onClick : handleNuevoRegistro,
                                 title : 'Nuevo',
                                 icon : <AddCircleIcon  style={{color: styles.colorButtons.blue}}/>
                             },
                             {
                                 inRows: true, inToolbar: false, onOnlySelection: false,
-                                whenLoading: cargandoSeleccionado,
+                                onLoading: cargandoSeleccionado,
                                 onClick : handleEditarRegistro,
                                 title : 'Editar',
                                 icon : <EditIcon color="orange"/>
                             },
                             {
                                 inRows: true, inToolbar: false, onOnlySelection: false,
-                                whenLoading: cargandoEliminar,
+                                onLoading: cargandoEliminar,
                                 onClick : handleEliminarRegistro,
                                 title : 'Eliminar',
                                 icon : <DeleteIcon style={{color: styles.colorButtons.red}}/>

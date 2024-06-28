@@ -29,6 +29,11 @@ const mainMenu = [
                 url: "/horarios",
                 icon: CalendarIcon
             },
+            {
+                name: "Usuarios",
+                url: "/usuarios",
+                icon: AccountCircleIcon
+            },
         ]
     },
     {

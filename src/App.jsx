@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 import { RequireAuth } from './components';
 import './App.css';
-import { Horario, HorarioPersonal, ImprimirAsistenciaManual, Login, MarcarAsistencia, Personal, Principal, RegistrarAsitenciaManual } from './pages';
+import { Horario, HorarioPersonal, ImprimirAsistenciaManual, Login, MarcarAsistencia, Personal, Principal, RegistrarAsitenciaManual, Usuarios } from './pages';
 import { useEffect } from 'react';
 import useNotification from './hooks/useNotification';
 import { useUI } from './hooks';
@@ -24,6 +24,7 @@ function App() {
               {/* Private */}
               <Route element = {<RequireAuth/>}>
                 <Route path="/main" element={<Principal />} />
+                <Route path="/usuarios" element={<Usuarios />} />
                 <Route path="/personal" element={<Personal />} />
                 <Route path="/horarios" element={<Horario />} />
                 <Route path="/horarios-personal" element={<HorarioPersonal />} />

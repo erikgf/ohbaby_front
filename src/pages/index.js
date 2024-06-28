@@ -6,3 +6,4 @@ export * from './Principal/Principal';
 export * from './MarcarAsistencia/MarcarAsistencia';
 export * from './RegistrarAsistenciaManual/RegistrarAsistenciaManual';
 export * from './ImprimirAsistenciaManual/ImprimirAsistenciaManual';
+export * from './Usuarios/Usuarios';
