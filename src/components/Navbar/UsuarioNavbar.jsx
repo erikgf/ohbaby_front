@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react";
-import { Box, IconButton, Menu, MenuItem, Tooltip } from "@mui/material";
+import { useState } from "react";
+import { Box, IconButton, Menu, MenuItem,  } from "@mui/material";
 import { MdMoreVert as MoreIcon } from 'react-icons/md'
 import { useAuth } from "../../hooks/useAuth";
-//import { useAtrasados } from "../../pages/Atrasados/hooks/useAtrasados";
+import { useFormCambiarClave } from "../../pages/_common/useFormCambiarClave";
 
 export const UsuarioNavbar = ()=>{
     const { user, onCerrarSesion } = useAuth();
-    //const { cantidadAtrasados, onCargarAtrasados } = useAtrasados();
     const [anchorMenuEl, setAnchorMenuEl] = useState(null);
+    const { onAbrirModal } = useFormCambiarClave();
 
     const handleMenu = (event) => {
         setAnchorMenuEl(event.currentTarget);
@@ -21,9 +21,9 @@ export const UsuarioNavbar = ()=>{
         onCerrarSesion();
     };
 
-    useEffect(()=>{
-        //onCargarAtrasados();
-    }, []);
+    const handleCambiarClave = ()=>{
+        onAbrirModal({ name: user.name, id: user.id });
+    };
 
     return  <Box>
                 {/*
@@ -65,6 +65,7 @@ export const UsuarioNavbar = ()=>{
                     onClose={handleMenuClose}
                 >
                     <MenuItem dense divider>{user?.name}</MenuItem>
+                    <MenuItem dense divider onClick={handleCambiarClave}>Cambiar Clave</MenuItem>
                     <MenuItem dense onClick={handleCerrarSesion}>Cerrar Sesión</MenuItem>
                 </Menu>
             </Box>
