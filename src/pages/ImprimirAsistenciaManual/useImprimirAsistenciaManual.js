@@ -4,8 +4,8 @@ const URL_PDF_CONTROLASISTENCIA = `${BASE_URL}/pdf/control-asistencia`;
 export const useImprimirAsistenciaManual = () =>{
 
     const generarPDF = ({fecha}) => {
-        console.log({fecha});
-        window.open(`${URL_PDF_CONTROLASISTENCIA}/${fecha}`, "_blank");
+        window.open(`${URL_PDF_CONTROLASISTENCIA}/${fecha}?key=varios`, "_blank");
+        window.open(`${URL_PDF_CONTROLASISTENCIA}/${fecha}?key=novarios`, "_blank");
     };
 
     return {

@@ -1,15 +1,20 @@
-import { Grid, TextField } from "@mui/material";
+import { Card, CardContent, CardHeader, Divider, Grid, TextField, Typography } from "@mui/material";
 import { ModalRegister } from "../../../components";
 import { useForm } from "../../../hooks/useForm";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { usePersonalContrato } from "../hooks/usePersonalContrato";
 import { recalcularCostosDiaHora } from "../data/recalcularCostosDiaHora";
+import { AutocompleteOnline } from "../../../components/AutocompleteOnline/AutocompleteOnline";
+import { useBuscarPersonalComparacion } from "../hooks/useBuscarPersonalComparacion";
+import { PersonalCompara } from "./PersonalCompara";
 
 const modalTitle = "Agregar Contrato", modalTitleEditar = "Editar Contrato";
 
 
 export const ModalRegistroContratos = () => {
     const { openModalContrato, contrato, onCerrarContrato, onAgregarContrato, onModificarContrato } = usePersonalContrato();
+    const [ personalCompara, setPersonalCompara ] = useState(null);
+    const { data : listaPersonalCompara, loading: cargandoPersonalCompara, setSearchTerm : setBuscarTermPersonalCompara } = useBuscarPersonalComparacion();
     const { valuesForm, assignValueForm, resetValueForm } = useForm({
         id: null,
         fechaInicio: "",
@@ -44,6 +49,10 @@ export const ModalRegistroContratos = () => {
         }
     }, [openModalContrato]);
 
+    useEffect(()=>{
+        return setPersonalCompara(null);
+    }, []);
+
     return <ModalRegister
                 modalTitle = { !Boolean(contrato?.id) ? modalTitle : modalTitleEditar}
                 okButtonText = 'Guardar'
@@ -62,6 +71,28 @@ export const ModalRegistroContratos = () => {
                     
                 }}
             >
+            <Card>
+                <CardHeader sx={{pb: 0}} title="Buscar trabajador" titleTypographyProps={{variant: "body1"}} />
+                <CardContent>
+                    <Grid container spacing={2} pb={2}>
+                        <Grid item xs={12}>
+                            <AutocompleteOnline
+                                    value = { personalCompara }
+                                    setValue = { setPersonalCompara }
+                                    loadingItems = { cargandoPersonalCompara }
+                                    items = { listaPersonalCompara }
+                                    setBuscarItemTerm={ setBuscarTermPersonalCompara }
+                                    label = {"Buscar personal para comparar"}
+                                />
+                        </Grid>
+                    </Grid>
+                    {
+                        personalCompara &&
+                            <PersonalCompara personal={personalCompara}/>
+                    }
+                </CardContent>
+            </Card>
+            <Divider sx={{mb: 2}} />
             <Grid container spacing={2}>
                 <Grid item  xs={12} md={4}>
                     <TextField
@@ -157,7 +188,6 @@ export const ModalRegistroContratos = () => {
                         />
                 </Grid>
             </Grid>
-
             <Grid container spacing={2}>
                 <Grid item xs={12} sm={3}>
                     <TextField

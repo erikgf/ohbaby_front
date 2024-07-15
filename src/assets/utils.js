@@ -48,6 +48,9 @@ export const getMeses = ()=>{
 }
 
 export const getDiasFromNumDias = (cadenaNumDias)=>{
+    if (!Boolean(cadenaNumDias)){
+        return "";
+    }
     const arregloNumDias = cadenaNumDias.split(",");
     const diasSemana = getDiasSemana();
     return arregloNumDias.map(numDia => {

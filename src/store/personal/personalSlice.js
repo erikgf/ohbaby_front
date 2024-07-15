@@ -22,7 +22,9 @@ const defaultRegistro = {
     fechaNacimiento: "",
     distritoUbigeo: "",
     pais: "PE",
-    contratos : []
+    contratos : [],
+    id_empresa: "",
+    numero_orden : "1"
 };
 
 export const personalSlice = createSlice({

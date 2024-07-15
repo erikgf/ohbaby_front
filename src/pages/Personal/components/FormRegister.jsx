@@ -10,15 +10,16 @@ import { useUbigeoProvinciasBean } from "../../../hooks/useUbigeoProvinciasBean"
 import { useUbigeoDistritosBean } from "../../../hooks/useUbigeoDistritosBean";
 import { usePersonalContrato } from "../hooks/usePersonalContrato";
 import useConfirm from "../../../hooks/useConfirm";
+import { useEmpresasBean } from "../../../hooks";
 
 export const FormRegister = () => {
-    const { openModal, seleccionado, cargandoGuardar, onGuardarRegistro, onCloseModal, 
-    } = usePersonal();
+    const { openModal, seleccionado, cargandoGuardar, onGuardarRegistro, onCloseModal } = usePersonal();
     const { onLeerModalContrato, onEliminarContrato, onFinalizarContrato } = usePersonalContrato();
     const { valuesForm, assignValueForm, resetValueForm } = useForm({defaultValuesForm});
     const { data : deps, cargando: cargandoDeps } = useUbigeoDepartamentosBean();
     const { data : provs, cargando: cargandoProvs, onListar : onListarProvincias } = useUbigeoProvinciasBean();
     const { data : dists, cargando: cargandoDists, onListar : onListarDistritos } = useUbigeoDistritosBean();
+    const { data: empresas, cargando: cargandoEmpresas }  = useEmpresasBean();
     const { confirm } = useConfirm();
     
     const puedoAgregarNuevoContrato = Boolean(!valuesForm?.contratos?.length || valuesForm?.contratos?.find( c => Boolean(c.fechaFin)));
@@ -35,6 +36,8 @@ export const FormRegister = () => {
                     fechaNacimientoRaw,
                     distritoUbigeo,
                     pais,
+                    id_empresa,
+                    numero_orden,
                     contratos } = seleccionado;
 
             const departamento_ubigeo = distritoUbigeo?.substr(0, 2) ?? "";
@@ -64,7 +67,9 @@ export const FormRegister = () => {
                 provincia_ubigeo,
                 distrito_ubigeo,
                 pais,
-                contratos
+                contratos,
+                id_empresa,
+                numero_orden
             });
             return;
         }
@@ -170,7 +175,27 @@ export const FormRegister = () => {
                                     }}
                                 />
                             </Grid>
-                            <Grid item xs={12} sm={5}>
+                            <Grid item xs={12} sm={3}>
+                                <TextField
+                                    label="Empresa"
+                                    size="small"
+                                    margin="dense"
+                                    select
+                                    fullWidth
+                                    required
+                                    disabled = { cargandoEmpresas }
+                                    value = { cargandoEmpresas ? "" : (valuesForm?.id_empresa ?? "")}
+                                    onChange={ (e)=>{
+                                        assignValueForm("id_empresa", e.target.value);
+                                    }}
+                                >
+                                    <MenuItem value=""><em>Seleccionar</em></MenuItem>
+                                    {
+                                       empresas?.map( empresa => <MenuItem key={empresa.id} value={empresa.id}>{empresa.descripcion}</MenuItem>)
+                                    }
+                                </TextField>
+                            </Grid>
+                            <Grid item xs={12} sm={3}>
                                 <TextField
                                     label="Nombres"
                                     size="small"
@@ -322,7 +347,20 @@ export const FormRegister = () => {
                                     <MenuItem value="EC"><em>Ecuador</em></MenuItem>
                                 </TextField>
                             </Grid>
-
+                            <Grid item  xs={12} md={2}>
+                                <TextField
+                                    label="N. Orden"
+                                    size="small"
+                                    margin="dense"
+                                    fullWidth
+                                    type="number"
+                                    required
+                                    value = {valuesForm?.numero_orden ?? ""}
+                                    onChange={ (e)=>{
+                                        assignValueForm("numero_orden", e.target.value);
+                                    }}
+                                />
+                            </Grid>
                         </Grid>
                     </CardContent>
                 </Card>
@@ -418,7 +456,7 @@ export const FormRegister = () => {
                                                             </TableRow>
                                                         })
                                                     :   <TableRow>
-                                                        <TableCell colSpan={6} align="center"> Sin registros </TableCell>
+                                                        <TableCell colSpan={99} align="center"> Sin registros </TableCell>
                                                     </TableRow>
                                                 }
                                             </TableBody>

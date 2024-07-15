@@ -13,8 +13,7 @@ const styles = {
 }
 
 export const Flechas = () => {
-
-    const { personalGeneral, onMoverPersonalGeneralAAsociado } = usePersonalGeneral();
+    const { horarioSeleccionado, personalGeneral, onMoverPersonalGeneralAAsociado } = usePersonalGeneral();
     const { personal, onMoverAsociadoAPersonalGeneral } = usePersonalHorario();
 
     if (!Boolean(personal)){
@@ -22,7 +21,7 @@ export const Flechas = () => {
     }
 
     return  <Box sx={styles.boxFlecha}>
-                <IconButton onClick={()=>{onMoverPersonalGeneralAAsociado()}} disabled = { !Boolean(personalGeneral?.filter( item => item.seleccionado )?.length) } color="success"><ArrowLeftIcon fontSize={48} /></IconButton>
-                <IconButton onClick={()=>{onMoverAsociadoAPersonalGeneral()}} disabled = { !Boolean(personal?.filter( item => item.seleccionado )?.length) } color="error"><ArrowRightIcon fontSize={48} /></IconButton>
+                <IconButton onClick={()=>{onMoverPersonalGeneralAAsociado()}} disabled = { !horarioSeleccionado?.gestionando || !Boolean(personalGeneral?.filter( item => item.seleccionado )?.length) } color="success"><ArrowLeftIcon fontSize={48} /></IconButton>
+                <IconButton onClick={()=>{onMoverAsociadoAPersonalGeneral()}} disabled = { !horarioSeleccionado?.gestionando ||!Boolean(personal?.filter( item => item.seleccionado )?.length) } color="error"><ArrowRightIcon fontSize={48} /></IconButton>
             </Box>
 }

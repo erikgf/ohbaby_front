@@ -1,5 +1,6 @@
 export * from './useAuth';
 export * from './useConfirm';
+export * from './useEmpresasBean';
 export * from './useForm';
 export * from './useNotification';
 export * from './useUbigeoDepartamentosBean';

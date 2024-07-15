@@ -1,7 +1,16 @@
 import { Box, Grid } from "@mui/material"
 import { Flechas, Horarios, PersonalGeneral, PersonalHorario } from "./components";
+import { useEffect } from "react";
+import { usePersonalHorario } from "./hooks/usePersonalHorario";
 
 export const HorarioPersonal = () => {
+    const { onCancelar } = usePersonalHorario();
+
+    useEffect(()=>{
+        return onCancelar();
+    }, []);
+
+    
     return <Box m={2}>
         <Grid container spacing={2}>
             <Grid item xs={12} sm={4}>
