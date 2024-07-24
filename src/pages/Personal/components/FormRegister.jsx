@@ -195,7 +195,21 @@ export const FormRegister = () => {
                                     }
                                 </TextField>
                             </Grid>
-                            <Grid item xs={12} sm={3}>
+                            <Grid item  xs={12} md={2}>
+                                <TextField
+                                    label="N. Orden"
+                                    size="small"
+                                    margin="dense"
+                                    fullWidth
+                                    type="number"
+                                    required
+                                    value = {valuesForm?.numero_orden ?? ""}
+                                    onChange={ (e)=>{
+                                        assignValueForm("numero_orden", e.target.value);
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={4}>
                                 <TextField
                                     label="Nombres"
                                     size="small"
@@ -209,7 +223,7 @@ export const FormRegister = () => {
                                     }}
                                     />
                             </Grid>
-                            <Grid item xs={12} sm={5}>
+                            <Grid item xs={12} sm={3}>
                                 <TextField
                                     label="Ap. Paterno"
                                     size="small"
@@ -223,8 +237,7 @@ export const FormRegister = () => {
                                     }}
                                     />
                             </Grid>
-
-                            <Grid item xs={12} sm={5}>
+                            <Grid item xs={12} sm={3}>
                                 <TextField
                                     label="Ap. Materno"
                                     size="small"
@@ -346,20 +359,6 @@ export const FormRegister = () => {
                                     <MenuItem value="VE"><em>Venezuela</em></MenuItem>
                                     <MenuItem value="EC"><em>Ecuador</em></MenuItem>
                                 </TextField>
-                            </Grid>
-                            <Grid item  xs={12} md={2}>
-                                <TextField
-                                    label="N. Orden"
-                                    size="small"
-                                    margin="dense"
-                                    fullWidth
-                                    type="number"
-                                    required
-                                    value = {valuesForm?.numero_orden ?? ""}
-                                    onChange={ (e)=>{
-                                        assignValueForm("numero_orden", e.target.value);
-                                    }}
-                                />
                             </Grid>
                         </Grid>
                     </CardContent>

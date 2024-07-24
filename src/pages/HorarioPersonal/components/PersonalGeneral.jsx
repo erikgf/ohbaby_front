@@ -4,7 +4,7 @@ import { BlockVacio } from "../../../components/BlockVacio/BlockVacio";
 
 export const PersonalGeneral = () => {
     const { horarioSeleccionado, personalGeneral , cargandoPersonalGeneral, 
-            onListarPersonalLibre, onSeleccionarEmpleadoGeneral } = usePersonalGeneral();
+            onSeleccionarEmpleadoGeneral } = usePersonalGeneral();
 
     if (!Boolean(horarioSeleccionado?.gestionando)){
         return false;
@@ -13,7 +13,7 @@ export const PersonalGeneral = () => {
     return  <Card>
                 <CardContent>
                     <Typography variant = "h6">Personal General</Typography>
-                    <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+                    <List sx={{ width: '100%', maxWidth: 360, maxHeight: 600, overflow: "auto", bgcolor: 'background.paper' }}>
                         {
                             cargandoPersonalGeneral &&
                                 <LinearProgress />
@@ -30,9 +30,9 @@ export const PersonalGeneral = () => {
                                                     color: 'white'
                                                 },
                                             }}
-                                            >
-                                                <ListItemText primaryTypographyProps={{sx: {fontSize: '.85em'}}} primary={`${personal.numeroDocumento} | ${personal.apellidoPaterno} ${personal.apellidoMaterno}, ${personal.nombres}`} />
-                                            </ListItemButton>
+                                        >
+                                            <ListItemText primaryTypographyProps={{sx: {fontSize: '.85em'}}} primary={`${personal.numeroDocumento} | ${personal.apellidoPaterno} ${personal.apellidoMaterno}, ${personal.nombres}`} />
+                                        </ListItemButton>
                                 })
                             : <BlockVacio height={"400"} title="Sin empleados" />
                         }

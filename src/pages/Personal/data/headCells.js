@@ -1,5 +1,17 @@
 export const headCells = [
   {
+    id: 'empresaDesc',
+    align: 'left',
+    disablePadding: false,
+    label: 'Empresa',
+  },
+  {
+    id: 'numeroOrden',
+    align: 'left',
+    disablePadding: false,
+    label: 'N. Orden',
+  },
+  {
     id: 'idTipoDocumento',
     align: 'left',
     disablePadding: true,

@@ -39,21 +39,21 @@ export const PersonalHorario = () => {
                         }
                     </Stack>
                     
-                    <List sx={{ width: '100%', maxWidth: 360, maxHeight: 600, bgcolor: 'background.paper' }}>
+                    <List sx={{ width: '100%', maxWidth: 360, maxHeight: 600, bgcolor: 'background.paper', overflow: "auto" }}>
                         {
                             Boolean(horarioSeleccionado?.personal?.length) 
                             ?   horarioSeleccionado?.personal?.map( personal => {
-                                    return <ListItemButton divider key={personal.id} selected = { personal.seleccionado } onClick={()=>{
-                                            onSeleccionarHorarioPersonal(personal.id);
-                                        }}
-                                        sx={{
-                                            "&.Mui-selected": {
-                                                backgroundColor: "#080e58",
-                                                color: 'white'
-                                            },
-                                        }}>
-                                        <ListItemText primaryTypographyProps={{sx: {fontSize: '.85em'}}} primary={`${personal.numeroDocumento} | ${personal.apellidoPaterno} ${personal.apellidoMaterno}, ${personal.nombres} `} />
-                                    </ListItemButton>
+                                    return  <ListItemButton divider key={personal.id} selected = { personal.seleccionado } onClick={()=>{
+                                                    onSeleccionarHorarioPersonal(personal.id);
+                                                }}
+                                                sx={{
+                                                    "&.Mui-selected": {
+                                                        backgroundColor: "#080e58",
+                                                        color: 'white'
+                                                    },
+                                                }}>
+                                                <ListItemText primaryTypographyProps={{sx: {fontSize: '.85em'}}} primary={`${personal.numeroDocumento} | ${personal.apellidoPaterno} ${personal.apellidoMaterno}, ${personal.nombres} `} />
+                                            </ListItemButton>
                                 })
                             : <BlockVacio height={"400"} title="Sin empleados" />
                         }
