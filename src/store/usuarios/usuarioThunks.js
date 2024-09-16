@@ -1,3 +1,4 @@
+import mensajes from "../../data/mensajes";
 import { getUsuario, insertUsuario, getUsuarios, deleteUsuario, updateUsuario } from "../../services/usuarios/crud";
 import { setMessage, setMessageError } from "../ui/uiSlice";
 import { finallyLeer, finallyListar,
@@ -46,7 +47,7 @@ export const startingGuardar = ({dataForm, id})=>{
                             : await updateUsuario({id, data: dataForm});
             dispatch( okGuardar(data) );
             dispatch( setMessage({
-                text: 'Guardado correctamente.',
+                text: mensajes.GUARDADO_CORRECTAMENTE,
                 severity: 'success'
             }) );
         } catch (error) {
@@ -64,7 +65,7 @@ export const startingEliminar = ({ id })=>{
             await deleteUsuario({id});
             dispatch( okEliminar(id) );
             dispatch( setMessage({
-                text: 'Eliminado correctamente.',
+                text: mensajes.ELIMINADO_CORRECTAMENTE,
                 severity: 'success'
             }) );
         } catch (error) {

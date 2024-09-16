@@ -6,6 +6,7 @@ export const AutocompleteOnline = ({
     loadingItems = false,
     items = [],
     disabled = false,
+    required = false,
     label
 }) => {
    return <Autocomplete
@@ -15,8 +16,10 @@ export const AutocompleteOnline = ({
                             ? setValue(newValue)
                             : setValue(null)
                     }}
-                    onInputChange = {(event, newValue) =>{
-                        setBuscarItemTerm(newValue);
+                    onInputChange = {(event, newValue, reason) =>{
+                        if (reason != "reset"){
+                            setBuscarItemTerm(newValue);
+                        }
                     }}
                     isOptionEqualToValue={(option, value) => {
                         return option?.id === value?.id
@@ -30,6 +33,6 @@ export const AutocompleteOnline = ({
                     getOptionLabel = {(option) => (option ? `${option.descripcion}` : "")}
                     options={ items||[]}
                     fullWidth
-                    renderInput={(params) => <TextField {...params} label={label} />}
+                    renderInput={(params) => <TextField {...params} required={required} label={label} />}
                     />
 }

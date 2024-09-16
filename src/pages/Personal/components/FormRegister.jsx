@@ -11,6 +11,8 @@ import { useUbigeoDistritosBean } from "../../../hooks/useUbigeoDistritosBean";
 import { usePersonalContrato } from "../hooks/usePersonalContrato";
 import useConfirm from "../../../hooks/useConfirm";
 import { useEmpresasBean } from "../../../hooks";
+import { ModalFinalizarContrato } from "./ModalFinalizarContrato";
+import { useState } from "react";
 
 export const FormRegister = () => {
     const { openModal, seleccionado, cargandoGuardar, onGuardarRegistro, onCloseModal } = usePersonal();
@@ -20,9 +22,11 @@ export const FormRegister = () => {
     const { data : provs, cargando: cargandoProvs, onListar : onListarProvincias } = useUbigeoProvinciasBean();
     const { data : dists, cargando: cargandoDists, onListar : onListarDistritos } = useUbigeoDistritosBean();
     const { data: empresas, cargando: cargandoEmpresas }  = useEmpresasBean();
+    const [isFinalizandoContrato, setIsFinalizandoContrato] = useState(false);
     const { confirm } = useConfirm();
     
     const puedoAgregarNuevoContrato = Boolean(!valuesForm?.contratos?.length || valuesForm?.contratos?.find( c => Boolean(c.fechaFin)));
+    const existeContratoValido = valuesForm?.contratos?.find( c => !Boolean(c.fechaFin));
 
     useEffect(()=>{
         if (Boolean(seleccionado?.id)){
@@ -38,7 +42,13 @@ export const FormRegister = () => {
                     pais,
                     id_empresa,
                     numero_orden,
-                    contratos } = seleccionado;
+                    contratos,
+                    celular,
+                    sexo,
+                    estadoCivil,
+                    puesto,
+                    telefonoReferencia,
+                    nombreFamiliar } = seleccionado;
 
             const departamento_ubigeo = distritoUbigeo?.substr(0, 2) ?? "";
             const provincia_ubigeo = distritoUbigeo?.substr(0, 4) ?? "";
@@ -69,7 +79,13 @@ export const FormRegister = () => {
                 pais,
                 contratos,
                 id_empresa,
-                numero_orden
+                numero_orden,
+                celular,
+                sexo,
+                estado_civil : estadoCivil,
+                puesto,
+                telefono_referencia : telefonoReferencia,
+                nombre_familiar : nombreFamiliar
             });
             return;
         }
@@ -97,18 +113,20 @@ export const FormRegister = () => {
         return `${ !Boolean( seleccionado?.id ) ? 'Nuevo' : 'Editando'} Personal`;
     }, [seleccionado]);
 
-    const handleFinalizarContrato = async ({id}) =>{
+    const handleFinalizarContrato = async ( fechaCese ) =>{
+        const { id } = existeContratoValido;
         const isConfirmed = await confirm({
                 title: 'Finalizar Contrato', 
                 description: '¿Desea finalizar el contrato seleccionado? Esta acción es irreversible.'
             });
+
         if (isConfirmed){
-            onFinalizarContrato({id});
+            onFinalizarContrato({id, fechaCese});
             return;
         }
     };
 
-    return (
+    return ( <>
         <ModalRegister 
                 modalTitle = {titleModal}
                 okButtonText = 'Guardar'
@@ -266,6 +284,99 @@ export const FormRegister = () => {
                                     }}
                                     />
                             </Grid>
+                            <Grid item xs={12} sm={2}>
+                                <TextField
+                                    label="Celular"
+                                    size="small"
+                                    margin="dense"
+                                    type="tel"
+                                    fullWidth
+                                    value = {valuesForm?.celular ?? ""}
+                                    onChange={ (e)=>{
+                                        assignValueForm("celular", e.target.value);
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={2}>
+                                <TextField
+                                    label="Sexo"
+                                    size="small"
+                                    margin="dense"
+                                    select
+                                    fullWidth
+                                    required
+                                    value = {valuesForm?.sexo ?? ""}
+                                    onChange={ (e)=>{
+                                        assignValueForm("sexo", e.target.value);
+                                    }}
+                                >
+                                    <MenuItem value="" disabled><em>Seleccionar</em></MenuItem>
+                                    <MenuItem value="M">Masculino</MenuItem>
+                                    <MenuItem value="F">Femenino</MenuItem>
+                                </TextField>
+                            </Grid>
+                            <Grid item xs={12} sm={2}>
+                                <TextField
+                                    label="Est. Civil"
+                                    size="small"
+                                    margin="dense"
+                                    select
+                                    fullWidth
+                                    required
+                                    value = {valuesForm?.estado_civil ?? ""}
+                                    onChange={ (e)=>{
+                                        assignValueForm("estado_civil", e.target.value);
+                                    }}
+                                >
+                                    <MenuItem value="" disabled><em>Seleccionar</em></MenuItem>
+                                    <MenuItem value="S">Soltero</MenuItem>
+                                    <MenuItem value="C">Casado</MenuItem>
+                                    <MenuItem value="D">Divorciado</MenuItem>
+                                    <MenuItem value="V">Viudo</MenuItem>
+                                </TextField>
+                            </Grid>
+                            <Grid item xs={12} sm={3}>
+                                <TextField
+                                    label="Puesto"
+                                    size="small"
+                                    margin="dense"
+                                    type="text"
+                                    fullWidth
+                                    required
+                                    value = {valuesForm?.puesto ?? ""}
+                                    onChange={ (e)=>{
+                                        assignValueForm("puesto", e.target.value);
+                                    }}
+                                />
+                            </Grid>
+                        </Grid>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} sm={2}>
+                                <TextField
+                                    label="Telf. Ref."
+                                    size="small"
+                                    margin="dense"
+                                    type="tel"
+                                    fullWidth
+                                    value = {valuesForm?.telefono_referencia ?? ""}
+                                    onChange={ (e)=>{
+                                        assignValueForm("telefono_referencia", e.target.value);
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    label="Nombre del Familiar"
+                                    size="small"
+                                    margin="dense"
+                                    type="text"
+                                    fullWidth
+                                    value = {valuesForm?.nombre_familiar ?? ""}
+                                    onChange={ (e)=>{
+                                        assignValueForm("nombre_familiar", e.target.value);
+                                    }}
+                                />
+                            </Grid> 
                         </Grid>
                         <Grid container spacing={2}>
                             <Grid item  xs={12} md={4}>
@@ -396,22 +507,20 @@ export const FormRegister = () => {
                                                 NUEVO
                                             </Button>
                                         </Tooltip>
-                                        <Tooltip title="FINALIZAR CONTRATO">
-                                            <Button 
-                                                color="error"
-                                                variant="contained"
-                                                sx = {{pr: 3, pl: 3}}
-                                                onClick={(e)=>{
-                                                    const contrato = valuesForm?.contratos?.find( c => !Boolean(c.fechaFin));
-                                                    if (!contrato){
-                                                        alert("No hay contratos para finalizar");
-                                                        return;
-                                                    }
-                                                    handleFinalizarContrato(contrato);
-                                                }} 
-                                                startIcon= {<CloseIcon />}>
-                                                FINALIZAR
-                                            </Button>
+                                        <Tooltip title={"FINALIZAR"}>
+                                            <span>
+                                                <Button 
+                                                    color="error"
+                                                    variant="contained"
+                                                    sx = {{pr: 3, pl: 3}}
+                                                    disabled = { !existeContratoValido }
+                                                    onClick={(e)=>{
+                                                        setIsFinalizandoContrato(true);
+                                                    }} 
+                                                    startIcon= {<CloseIcon />}>
+                                                    FINALIZAR
+                                                </Button>
+                                            </span>
                                         </Tooltip>
                                     </Toolbar>
                                     <TableContainer>
@@ -467,5 +576,11 @@ export const FormRegister = () => {
                     </Grid>
                 </Grid>
         </ModalRegister>
+        <ModalFinalizarContrato 
+                isOpenModal = {isFinalizandoContrato && existeContratoValido} 
+                seleccionado = { seleccionado }
+                closeModal = {()=> setIsFinalizandoContrato(false)}
+                handleFinalizarContrato = {handleFinalizarContrato} />
+    </>
     )
 }

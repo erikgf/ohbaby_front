@@ -1,20 +1,22 @@
-import { Box, Grid, MenuItem, TextField, } from "@mui/material";
+import { Box, Grid, TextField } from "@mui/material";
 import useConfirm from "../../../hooks/useConfirm";
-import { styles } from "../../../assets/styles";
-import { MdAddCircle as AddCircleIcon, MdEdit as EditIcon, MdDelete as DeleteIcon, MdRefresh as RefreshIcon} from "react-icons/md";
 import { TableManager } from "../../../components";
-import { usePersonal } from "../hooks/usePersonal";
+import { MdRefresh as RefreshIcon, MdAddCircleOutline as AddCircleIcon, MdEdit as EditIcon, MdDelete as DeleteIcon } from 'react-icons/md';
+import { useEntregas } from "../hooks/useEntregas";
 import { useEffect, useState } from "react";
 import { headCells } from "../data/headCells";
-import { useEmpresasBean } from "../../../hooks";
+import { styles } from "../../../assets/styles";
+import mensajes from "../../../data/mensajes";
+import { getHoy } from "../../../assets/utils";
 
-const tableTitle = "Gestionar Personal";
+const tableTitle = "Registrar Descuentos y Adelantos";
+const hoy = getHoy();
 
-export const ListaPersonal = () => {
-    const { registros, cargandoRegistros, cargandoEliminar, cargandoSeleccionado, 
-        onListar, onEliminarRegistro, onNuevoRegistro, onLeerRegistro} = usePersonal();
-    const { data : listaEmpresas } = useEmpresasBean();
-    const [empresaFiltro, setEmpresaFiltro] = useState("X");
+export const Lista = () => {
+    const { registros, cargandoRegistros, cargandoEliminar, cargandoSeleccionado,
+            onListar, onEliminarRegistro, onNuevoRegistro, onLeerRegistro} = useEntregas();
+    const [fechaInicio, setFechaInicio] = useState(hoy);
+    const [fechaFin, setFechaFin] = useState(hoy);
     const { confirm } = useConfirm();
 
     const handleNuevoRegistro = () =>{
@@ -27,8 +29,8 @@ export const ListaPersonal = () => {
 
     const handleEliminarRegistro = async ({id}) =>{
         const isConfirmed = await confirm({
-                        title: 'Eliminar Registro', 
-                        description: '¿Desea eliminar el registro seleccionado? Esta acción es irreversible.'
+                        title: mensajes.ROTULO_ELIMINAR_REGISTRO, 
+                        description: mensajes.DESEA_ELIMINAR_REGISTRO
                     });
         if (isConfirmed){
             onEliminarRegistro({id});
@@ -36,12 +38,16 @@ export const ListaPersonal = () => {
         }
     };
 
+    const handleListar = () => {
+        onListar(fechaInicio, fechaFin);
+    }
+
     useEffect(()=>{
-        onListar(empresaFiltro);
-    }, [empresaFiltro]);
+        handleListar();
+    }, []);
 
     return  <Grid container spacing={2}>
-                <Grid item xs = {12}>
+                <Grid item xs = {12} md={8}>
                     <TableManager
                         tableTitle={tableTitle}
                         rows =  {registros} 
@@ -54,7 +60,7 @@ export const ListaPersonal = () => {
                         onActions = {[
                             {
                                 inRows: false, inToolbar: true, noSelection: true, onOnlySelection: false,
-                                onClick : () => {onListar(empresaFiltro)},
+                                onClick : handleListar,
                                 title : 'Actualizar',
                                 icon : <RefreshIcon  style={{color: styles.colorButtons.green}}/>
                             },
@@ -79,28 +85,24 @@ export const ListaPersonal = () => {
                                 icon : <DeleteIcon style={{color: styles.colorButtons.red}}/>
                             }
                         ]}
-                    >   
-                        <Box ml={3} mb={3}>
-                            <Grid container spacing={2}>
-                                <Grid item md={3}>
-                                    <TextField 
-                                        label="Filtrar por Empresa"
-                                        margin="dense"
-                                        fullWidth
-                                        size="small"
-                                        select
-                                        value={empresaFiltro}
-                                        onChange={(e)=>{
-                                            setEmpresaFiltro(e.target.value)
-                                        }}
-                                    >
-                                        <MenuItem value="X">Todas</MenuItem>
-                                        {
-                                            listaEmpresas?.map( item => <MenuItem value={item.id}>{item.descripcion}</MenuItem>)
-                                        }
-                                    </TextField>
+                    >
+                        <Box ml={2}>
+                                <Grid container spacing={2}>
+                                    <Grid item xs={6} md={3}>
+                                        <TextField margin="dense" type="date" InputLabelProps={{shrink: true}}
+                                            value={fechaInicio}
+                                            onChange={(e)=>{
+                                                setFechaInicio(e.target.value);
+                                            }} name="fecha_desde" fullWidth size="small" label="Desde"/>
+                                    </Grid>
+                                    <Grid item xs={6} md={3}>
+                                        <TextField margin="dense" type="date" InputLabelProps={{shrink: true}} 
+                                            value={fechaFin}
+                                            onChange={(e)=>{
+                                                setFechaFin(e.target.value);
+                                            }} name="fecha_hasta" fullWidth size="small" label="Hasta"/>
+                                    </Grid>
                                 </Grid>
-                            </Grid>
                         </Box>
                     </TableManager>
                 </Grid>

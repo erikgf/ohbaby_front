@@ -26,6 +26,13 @@
   }
 }
 
+.link{
+  color: #0000ff;
+  font-style: oblique;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 body {
   background: linear-gradient(60deg, #080e58, #3fa2db, #217fb0, #141d84, #141d84);
   background-size: 1000% 1000%;

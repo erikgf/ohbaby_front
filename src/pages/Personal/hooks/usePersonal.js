@@ -10,8 +10,8 @@ export const usePersonal = ()=>{
         dispatch(startNuevoRegistro());
     };
 
-    const onListar = async ()=>{
-        dispatch(startingListar());
+    const onListar = async (empresaFiltro)=>{
+        dispatch(startingListar({empresaFiltro}));
     };
 
     const onGuardarRegistro = async (dataForm)=>{

@@ -20,6 +20,11 @@ const mainMenu = [
         name: "Mantenimientos",
         children: [
             {
+                name: "Tipo Entregas Efectivo",
+                url: "/tipo-entregas",
+                icon: OutboxIcon
+            },
+            {
                 name: "Personal",
                 url: "/personal",
                 icon: ManageAccountsIcon
@@ -40,31 +45,39 @@ const mainMenu = [
         name: "Gestión",
         children: [
             {
+                name: "Reg. Descuentos y Adelantos",
+                url: "/entregas",
+                icon: TouchAppIcon
+            },
+            {
                 name: "Asignar Horarios a Personal ",
                 url: "/horarios-personal",
                 icon: EventIcon
-            },
-            {
-                name: "Imprimir Asistencia Manual",
-                url: "/imprimir-asistencia-manual",
-                icon: PrintIcon
             },
             {
                 name: "Registrar Asistencia Manual",
                 url: "/registrar-asistencia-manual",
                 icon: TouchAppIcon
             },
+            /*
             {
                 name: "Marcar Asistencia",
                 url: "/marcar-asistencia",
                 icon: TouchAppIcon,
                 showNavbar : false
             },
+            */
         ]
     },
     {
         name: "Reportes",
-        children: []
+        children: [
+            {
+                name: "Imprimir Asistencia Manual",
+                url: "/imprimir-asistencia-manual",
+                icon: PrintIcon
+            },
+        ]
     }
 ];
 
@@ -73,10 +86,9 @@ const porteroMenu = [
         name: "Gestión",
         children: [
             {
-                name: "Marcar Asistencia",
-                url: "/marcar-asistencia",
-                icon: TouchAppIcon,
-                showNavbar : false
+                name: "Imprimir Asistencia Manual",
+                url: "/imprimir-asistencia-manual",
+                icon: PrintIcon
             },
         ]
     },

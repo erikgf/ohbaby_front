@@ -1,3 +1,4 @@
+import mensajes from "../../data/mensajes";
 import { getHorariosPersonal } from "../../services/horariosPersonal/getHorariosPersonal";
 import { getPersonalLibre } from "../../services/horariosPersonal/getPersonalLibre";
 import { submitHorarioPersonal } from "../../services/horariosPersonal/submitHorarioPersonal";
@@ -41,7 +42,7 @@ export const startingGuardarPersonalHorario  = ({idHorario, arregloIdEmpleadoCon
             const data = await submitHorarioPersonal({idHorario, arregloIdEmpleadoContratos});
             dispatch( okGuardarersonalHorario(data) );
             dispatch( setMessage({
-                text: 'Personal asignado correctamente.',
+                text: mensajes.PERSONAL_ASIGNADO_CORRECTAMENTE,
                 severity: 'success'
             }) );
         } catch (error) {

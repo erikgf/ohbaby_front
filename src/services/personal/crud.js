@@ -11,8 +11,12 @@ export const getPersonal = async ({id}) => {
 };
 
 
-export const getPersonals = async () => {
-    const res = await axiosPrivate.get(`/empleados`);
+export const getPersonals = async ({empresaFiltro}) => {
+    const paramsData = new URLSearchParams({
+        id_empresa: empresaFiltro
+    });
+
+    const res = await axiosPrivate.get(`/empleados?${paramsData.toString()}`);
     return res.data;
 };
 

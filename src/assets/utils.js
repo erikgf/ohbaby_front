@@ -65,4 +65,19 @@ export const getFormalDate = () =>{
     const mes = ahora.getMonth();
     //Obtener día, obtener mes, obtener
     return `${getDiasSemana()[diaSemana]}, ${dia} de ${getMeses()[mes]} del ${anio}`;
-}
+};
+
+export const getSimpleRound = (number, float = 1) => {
+    if (isNaN(number) || number == null){
+        console.error("Número no válido.");
+        return null;
+    }
+
+    if (float <= 0){
+        console.error("Flotante menor que 0.")
+        return null;
+    }
+
+    const multiplicadorDecimal = Math.pow(10, float);
+    return Math.round(number * multiplicadorDecimal) / multiplicadorDecimal;
+};

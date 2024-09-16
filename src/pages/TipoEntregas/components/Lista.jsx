@@ -1,20 +1,17 @@
-import { Box, Grid, MenuItem, TextField, } from "@mui/material";
+import { Grid } from "@mui/material";
 import useConfirm from "../../../hooks/useConfirm";
-import { styles } from "../../../assets/styles";
-import { MdAddCircle as AddCircleIcon, MdEdit as EditIcon, MdDelete as DeleteIcon, MdRefresh as RefreshIcon} from "react-icons/md";
 import { TableManager } from "../../../components";
-import { usePersonal } from "../hooks/usePersonal";
-import { useEffect, useState } from "react";
+import { MdRefresh as RefreshIcon, MdAddCircleOutline as AddCircleIcon, MdEdit as EditIcon, MdDelete as DeleteIcon } from 'react-icons/md';
+import { useTipoEntregas } from "../hooks/useTipoEntregas";
+import { useEffect } from "react";
 import { headCells } from "../data/headCells";
-import { useEmpresasBean } from "../../../hooks";
+import { styles } from "../../../assets/styles";
 
-const tableTitle = "Gestionar Personal";
+const tableTitle = "Gestionar Tipo de Entregas";
 
-export const ListaPersonal = () => {
+export const Lista = () => {
     const { registros, cargandoRegistros, cargandoEliminar, cargandoSeleccionado, 
-        onListar, onEliminarRegistro, onNuevoRegistro, onLeerRegistro} = usePersonal();
-    const { data : listaEmpresas } = useEmpresasBean();
-    const [empresaFiltro, setEmpresaFiltro] = useState("X");
+        onListar, onEliminarRegistro, onNuevoRegistro, onLeerRegistro} = useTipoEntregas();
     const { confirm } = useConfirm();
 
     const handleNuevoRegistro = () =>{
@@ -37,11 +34,11 @@ export const ListaPersonal = () => {
     };
 
     useEffect(()=>{
-        onListar(empresaFiltro);
-    }, [empresaFiltro]);
+        onListar();
+    }, []);
 
     return  <Grid container spacing={2}>
-                <Grid item xs = {12}>
+                <Grid item xs = {12} md={7}>
                     <TableManager
                         tableTitle={tableTitle}
                         rows =  {registros} 
@@ -54,7 +51,7 @@ export const ListaPersonal = () => {
                         onActions = {[
                             {
                                 inRows: false, inToolbar: true, noSelection: true, onOnlySelection: false,
-                                onClick : () => {onListar(empresaFiltro)},
+                                onClick : () => {onListar()},
                                 title : 'Actualizar',
                                 icon : <RefreshIcon  style={{color: styles.colorButtons.green}}/>
                             },
@@ -79,30 +76,7 @@ export const ListaPersonal = () => {
                                 icon : <DeleteIcon style={{color: styles.colorButtons.red}}/>
                             }
                         ]}
-                    >   
-                        <Box ml={3} mb={3}>
-                            <Grid container spacing={2}>
-                                <Grid item md={3}>
-                                    <TextField 
-                                        label="Filtrar por Empresa"
-                                        margin="dense"
-                                        fullWidth
-                                        size="small"
-                                        select
-                                        value={empresaFiltro}
-                                        onChange={(e)=>{
-                                            setEmpresaFiltro(e.target.value)
-                                        }}
-                                    >
-                                        <MenuItem value="X">Todas</MenuItem>
-                                        {
-                                            listaEmpresas?.map( item => <MenuItem value={item.id}>{item.descripcion}</MenuItem>)
-                                        }
-                                    </TextField>
-                                </Grid>
-                            </Grid>
-                        </Box>
-                    </TableManager>
+                        />
                 </Grid>
             </Grid>
 }

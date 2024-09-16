@@ -6,6 +6,8 @@ import { horariosSlice } from "./horarios/horariosSlice";
 import { horariosPersonalSlice } from "./horariosPersonal/horariosPersonalSlice";
 import { usuarioSlice } from "./usuarios/usuarioSlice";
 import { cambiarClaveSlice } from "./cambiarClave/cambiarClaveSlice";
+import { tipoEntregaSlice } from "./tipoEntregas/tipoEntregasSlice";
+import { entregaSlice } from "./entregas/entregasSlice";
 
 export const store = configureStore({
     reducer : {
@@ -15,6 +17,8 @@ export const store = configureStore({
         personal : personalSlice.reducer,
         horarios: horariosSlice.reducer,
         horariosPersonal: horariosPersonalSlice.reducer,
-        usuario: usuarioSlice.reducer
+        usuario: usuarioSlice.reducer,
+        tipoEntregas: tipoEntregaSlice.reducer,
+        entregas: entregaSlice.reducer
     }
 });

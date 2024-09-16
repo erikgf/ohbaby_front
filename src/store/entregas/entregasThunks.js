@@ -1,13 +1,13 @@
-import mensajes from "../../data/mensajes";
-import { deleteHorario, getHorario, getHorarios, insertHorario, updateHorario } from "../../services/horarios";
+import { deleteEntrega, getEntrega, getEntregas, insertEntrega, updateEntrega } from "../../services/entregas/crud";
+import { finallyLeer, finallyListar, okEliminar, okGuardar, okLeer, okListar, startEliminar, startGuardar, startLeer, startListar } from "./entregasSlice";
 import { setMessage, setMessageError } from "../ui/uiSlice";
-import { finallyLeer, finallyListar, okEliminar, okGuardar, okLeer, okListar, startEliminar, startGuardar, startLeer, startListar } from "./horariosSlice";
+import mensajes from "../../data/mensajes";
 
-export const startingListar = ()=>{
+export const startingListar = (paramsData)=>{
     return async ( dispatch )=>{
         dispatch( startListar() );
         try {
-            const data = await getHorarios();
+            const data = await getEntregas(paramsData);
             dispatch( okListar(data) );
         } catch (error) {
             console.error({error});
@@ -22,7 +22,7 @@ export const startingLeer = ({id})=>{
     return async ( dispatch )=>{
         dispatch( startLeer() );
         try {
-            const data = await getHorario({id});
+            const data = await getEntrega({id});
             dispatch( okLeer(data) );
         } catch (error) {
             console.error({error});
@@ -38,8 +38,8 @@ export const startingGuardar = ({dataForm, id})=>{
         dispatch( startGuardar() );
         try {
             const data = !Boolean(id) 
-                            ? await insertHorario(dataForm)
-                            : await updateHorario({id, data: dataForm});
+                            ? await insertEntrega(dataForm)
+                            : await updateEntrega({id, data: dataForm});
             dispatch( okGuardar(data) );
             dispatch( setMessage({
                 text: mensajes.GUARDADO_CORRECTAMENTE,
@@ -58,7 +58,7 @@ export const startingEliminar = ({ id })=>{
     return async ( dispatch )=>{
         dispatch( startEliminar() );
         try {
-            await deleteHorario({id});
+            await deleteEntrega({id});
             dispatch( okEliminar(id) );
             dispatch( setMessage({
                 text: mensajes.ELIMINADO_CORRECTAMENTE,
