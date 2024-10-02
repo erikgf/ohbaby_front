@@ -77,6 +77,11 @@ const mainMenu = [
                 url: "/imprimir-asistencia-manual",
                 icon: PrintIcon
             },
+            {
+                name: "Reporte de Registros de Asistencia",
+                url: "/reporte-asistencias-registro",
+                icon: PrintIcon
+            }
         ]
     }
 ];

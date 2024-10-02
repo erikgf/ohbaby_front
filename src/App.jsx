@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 import { RequireAuth } from './components';
 import './App.css';
-import { Entregas, Horario, HorarioPersonal, ImprimirAsistenciaManual, Login, MarcarAsistencia, Personal, Principal, RegistrarAsitenciaManual, TipoEntregas, Usuarios } from './pages';
+import { Entregas, Horario, HorarioPersonal, ImprimirAsistenciaManual, Login, MarcarAsistencia, Personal, Principal, RegistrarAsitenciaManual, ReporteAsistenciaRegistro, TipoEntregas, Usuarios } from './pages';
 import { useEffect } from 'react';
 import useNotification from './hooks/useNotification';
 import { useUI } from './hooks';
@@ -33,6 +33,7 @@ function App() {
                 <Route path="/registrar-asistencia-manual" element={<RegistrarAsitenciaManual />} />
                 <Route path="/entregas" element={<Entregas />} />
                 <Route path="/imprimir-asistencia-manual" element={<ImprimirAsistenciaManual />} />
+                <Route path="/reporte-asistencias-registro" element={<ReporteAsistenciaRegistro />} />
               </Route>
               { /* Catch all */}
               <Route path="*" element={<Login />} />
