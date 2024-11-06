@@ -1,22 +1,28 @@
-export const recalcularCostosDiaHora = ( salario, diasTrabajo, horasDia) => {
+export const recalcularCostosDiaHora = ( salario, diasTrabajo, horasSemana) => {
+    const diasEnSemana = 6;
     if (diasTrabajo == 0){
         return {
             costoDia: "0.00",
-            costoHora: "0.00"
-        }
+            costoHora: "0.00",
+        };
     }
 
-    const costoDia = parseFloat((salario / diasTrabajo) ?? 1).toFixed(2);
+    const costoDia = salario / diasTrabajo;
+    const sueldoSemanal = parseFloat( costoDia * diasEnSemana);
 
-    if (horasDia == 0){
+    if (horasSemana == 0){
         return {
-            costoDia,
-            costoHora: "0.00"
-        }
+            costoDia : parseFloat(costoDia).toFixed(2),
+            costoHora: "0.00",
+            horasDia : "0.00"
+        };
     }
-    const costoHora = parseFloat((costoDia / horasDia) ?? 1).toFixed(2);
+
+    const costoHora = parseFloat(sueldoSemanal / horasSemana).toFixed(2);
+    const horasDia = parseFloat(horasSemana / diasEnSemana).toFixed(2);
 
     return {
-        costoDia, costoHora
+        costoDia : parseFloat(costoDia).toFixed(2),
+        costoHora, horasDia
     };
 };

@@ -96,7 +96,7 @@ export const ListaPersonal = () => {
                                     >
                                         <MenuItem value="X">Todas</MenuItem>
                                         {
-                                            listaEmpresas?.map( item => <MenuItem value={item.id}>{item.descripcion}</MenuItem>)
+                                            listaEmpresas?.map( item => <MenuItem key={item.id} value={item.id}>{item.descripcion}</MenuItem>)
                                         }
                                     </TextField>
                                 </Grid>

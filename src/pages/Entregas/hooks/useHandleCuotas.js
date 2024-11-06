@@ -3,23 +3,16 @@ import { getMeses, getSimpleRound } from "../../../assets/utils";
 const listaMeses = getMeses();
 
 export const useHandleCuotas = () => {
-    const onAgregarCuotas = (cantidadCuotas, fecha_registro, cuotas) => {
-        const objFecha = new Date(fecha_registro);
-        let numeroMesFecha = objFecha.getMonth() + (cuotas?.length) + 1; 
-        const anioFecha = objFecha.getFullYear();
-
+    const onAgregarCuotas = (cantidadCuotas, cuotas) => {
         let cuotasNuevas = [];
         const time = new Date().getTime();
 
         for (let index = 0; index < cantidadCuotas; index++) {
-            let numeroMesFechaFor = numeroMesFecha + index;
-            const mesFechaCuota = listaMeses[numeroMesFechaFor >= 12 ? numeroMesFechaFor % 12 : numeroMesFechaFor];
-            const anioFechaCuota = anioFecha + (numeroMesFechaFor >= 12 ? parseInt(numeroMesFechaFor / 12) : 0);
-
             cuotasNuevas.push({
                 id: time + index,
                 backend: false,
-                fecha_cuota: `${mesFechaCuota} ${anioFechaCuota}`,
+                fecha_cuota: "",
+                motivo_registro :"",
                 monto_cuota: "0.00",
             })
         }

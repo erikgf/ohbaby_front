@@ -1,12 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export const defaultRegistro = {
-    id: null,
+    isEditando : false,
     tipo_entrega: null,
     empleado_contrato: null,
-    motivo: "",
-    fecha_registro: null,
-    monto_registrado: "",
     cuotas: []
 };
 
@@ -49,11 +46,20 @@ export const entregaSlice = createSlice({
                     id_empleado: empleado?.id
                 }
             };
-            
+
             state.seleccionado = {
-                ...seleccionado,
-                empleado_contrato
+                isEditando : true,
+                tipo_entrega: seleccionado.tipo_entrega,
+                empleado_contrato,
+                cuotas: [{
+                    id : seleccionado.id,
+                    fecha_cuota : seleccionado.fecha_registro,
+                    motivo_registro : seleccionado.motivo,
+                    monto_cuota : seleccionado.monto_registrado
+                }]
             };
+
+            console.log({s: state.seleccionado});;
 
             state.openModal = true;
         },
@@ -70,13 +76,13 @@ export const entregaSlice = createSlice({
         startGuardar: (state) => {
             state.cargandoGuardar = true;
         },
-        okGuardar : ( state, { payload }) => {
-            const nuevoRegistro = payload;
-            if (!Boolean(state.seleccionado?.id)){
-                state.registros.push(nuevoRegistro);
+        okGuardar : ( state, { payload : nuevosRegistros  }) => {
+            if (!Boolean(state.seleccionado.isEditando)){
+                state.registros = [...state.registros, ...nuevosRegistros];
             } else {
+                const nuevoRegistro = {...nuevosRegistros};
                 state.registros = state.registros.map(registro=>{
-                    if (registro.id === state.seleccionado.id){
+                    if (registro.id === nuevoRegistro.id){
                         return nuevoRegistro;
                     }
                     return registro;

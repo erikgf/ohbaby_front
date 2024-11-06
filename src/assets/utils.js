@@ -67,6 +67,11 @@ export const getFormalDate = () =>{
     return `${getDiasSemana()[diaSemana]}, ${dia} de ${getMeses()[mes]} del ${anio}`;
 };
 
+export const getFormattedDate = (fecha) => {
+    let [anio, mes, dia] = fecha.split("-");
+    return `${dia}/${mes}/${anio}`;
+}
+
 export const getSimpleRound = (number, float = 1) => {
     if (isNaN(number) || number == null){
         console.error("Número no válido.");

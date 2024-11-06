@@ -74,8 +74,6 @@ export const startingEliminar = ({ id })=>{
     }
 };
 
-
-
 export const startingFinalizarContrato = ({ id, fechaCese })=>{ //idContrato
     return async ( dispatch )=>{
         dispatch( startFinalizarContrato() );

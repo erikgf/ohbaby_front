@@ -4,7 +4,7 @@ import { setMessageError } from "../../store/ui/uiSlice";
 import { useDispatch } from "react-redux";
 import { consultarSueldos } from "../../services/reporteAsistenciasRegistro/consultarSueldos";
 import { useExcel } from "../../hooks/useExcel";
-import Constantes from "../../data/constantes";
+import { getFormattedDate } from "../../assets/utils";
 
 const formatDate= 'dd/mm/yyyy';
 const formatNumber = '0.00';
@@ -23,21 +23,54 @@ const columnasWorksheets = {
     sueldos: [
         { key: "codigo_unico", header: "Código", align: "left"},
         { key: "trabajador", header: "Nombres de Trabajador", align: "left"},
+        { key: "empresa", header: "Empresa", align: "left"},
+        { key: "costo_horas", header: "Costo Hora", align: "right", style : { numFmt : formatMoney}},
         { key: "total_horas", header: "Total Horas", align: "right", style : { numFmt : formatNumber}},
         { key: "total_pagar", header: "Total a Pagar", align: "right", style: { numFmt : formatMoney}},
-        { key: "adelanto_1", header: "Adel 1", align: "right", style: { numFmt : formatMoney}},
-        { key: "adelanto_2", header: "Adel 2", align: "right", style: { numFmt : formatMoney}},
-        { key: "adelanto_3", header: "Adel 3", align: "right", style: { numFmt : formatMoney}},
-        { key: "adelanto_resto", header: "Adel 4", align: "right", style: { numFmt : formatMoney}},
-        { key: "descuento_1", header: "Dscto 1", align: "right", style: { numFmt : formatMoney}},
-        { key: "descuento_resto", header: "Dscto 2", align: "right", style: { numFmt : formatMoney}},
-        { key: "adicional_dif", header: "Adic(-)", align: "right", style: { numFmt : formatMoney}, vacio: true},
+        //
+        { key: "descuento_planilla", header: "Dscto PLAME", align: "right", style: { numFmt : formatMoney}},
         { key: "t_adel_b", header: "T.Adel y B.", align: "right", style: { numFmt : formatMoney}, formula : "=SUM(E#,K#)"},
+        { key: "dscto_2", header: "Dscto 2", align: "right", style: { numFmt : formatMoney}, vacio: true, fgColor: "E97132"},
+        { key: "adicional_dif", header: "Adic(-)", align: "right", style: { numFmt : formatMoney}, vacio: true, fgColor: "E97132"},
         { key: "neto_pagar", header: "Neto a Pagar", align: "right", style: { numFmt : formatMoney}, formula : "=D#-L#"},
-        { key: "act", header: "#Act", vacio: true},
-        { key: "total", header: "#Total", vacio: true},
+        { key: "act", header: "#Act", vacio: true, fgColor: "E97132"},
+        { key: "total", header: "#Total", vacio: true, fgColor: "E97132"},
         { key: "vb", header: "V°B°", vacio: true},
+        { key: "numero_documento", header: "N° Documento", align: "left"},
     ]
+};
+
+const _abecedario  =  "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+const _procesarFechaAdelantos = (_data) => {
+    const listaFechas = _data.map( item => item.entregas.map( _item => _item.fecha_registro ) );
+    return [... new Set(listaFechas.flat(1))].sort().map( fecha_registro => ({ fecha_registro, fecha_registro_ft : getFormattedDate(fecha_registro)}));
+};
+
+const _procesarColumnasSueldos = (colSueldosOriginal, colFechas) => {
+    const colSueldosOriginalCopia = [...colSueldosOriginal];
+    const posicionColumnKeyTotalPagar = colSueldosOriginalCopia.findIndex( item => item.key === "total_pagar");
+    const cantidadFechas = colFechas.length;
+    console.log({posicionColumnKeyTotalPagar, cantidadFechas, x: _abecedario[posicionColumnKeyTotalPagar + cantidadFechas + 1]});
+    const primeraLetraAdelantosTotal = _abecedario[posicionColumnKeyTotalPagar + 1];
+    const ultimaLetraAdelantosTotal = _abecedario[posicionColumnKeyTotalPagar + cantidadFechas + 1];
+    const letraTotalPagar = _abecedario[posicionColumnKeyTotalPagar];
+    const letraAdelantosTotal = _abecedario[posicionColumnKeyTotalPagar + cantidadFechas + 2];
+    const colFechasFormateadasParaExcel = colFechas.map( item => {
+        return { key: `adelanto_${item.fecha_registro}`, header: item.fecha_registro_ft, align: "right", style: { numFmt : formatMoney}, fgColor: "E97132"};
+    });
+    colSueldosOriginalCopia.splice.apply(colSueldosOriginalCopia, [posicionColumnKeyTotalPagar + 1, 0].concat(colFechasFormateadasParaExcel));
+    return colSueldosOriginalCopia.map( item => {
+        if (item.key === "t_adel_b"){
+            return {...item, formula : `=SUM(${primeraLetraAdelantosTotal}#:${ultimaLetraAdelantosTotal}#)`};
+        }
+
+        if (item.key === "neto_pagar"){
+            return {...item, formula : `=${letraTotalPagar}#-${letraAdelantosTotal}#` };
+        }
+
+        return item;
+    });
 };
 
 export const useReporteAsistenciaRegistro = () => {
@@ -63,15 +96,18 @@ export const useReporteAsistenciaRegistro = () => {
             }
             
             if (isSueldo){
-                const { data: dataSueldos } = await consultarSueldos({ fechaInicio, fechaFin });    
+                const { data: dataSueldos } = await consultarSueldos({ fechaInicio, fechaFin });
+                const columnasFechaAdelantos = _procesarFechaAdelantos(dataSueldos);
+                const columnasSueldos = _procesarColumnasSueldos(columnasWorksheets.sueldos, columnasFechaAdelantos);
+                const datosSueldosProcesados = procesarSueldos(dataSueldos, columnasFechaAdelantos);
                 _data.push({
                     name: "Sueldos",
-                    columns: columnasWorksheets.sueldos,
-                    data: procesarSueldos(dataSueldos)
+                    columns: columnasSueldos,
+                    data: datosSueldosProcesados
                 });
             }
     
-            setWorksheets(_data);
+           setWorksheets(_data);
         } catch (error) {
             dispatch(setMessageError(error));
         } finally {
@@ -93,32 +129,36 @@ export const useReporteAsistenciaRegistro = () => {
         });
     };
 
-    const procesarSueldos = (_data) => {
+    const procesarSueldos = (_data, columnasFechaAdelantos) => {
+        const columnasFecha = columnasFechaAdelantos.map( item => item.fecha_registro );
         return _data.map( item => {
-            //Procesar adelantos
-            const adelantos = item?.entregas?.filter( _entrega => _entrega.tipo_entrega?.tipo == Constantes.CODIGO_ADELANTOS).map( _entrega  => _entrega.cuotas_sum_monto_cuota );
-            const adelantosTamano = adelantos.length;
-            //Procesar descuentos
-            const descuentos = item?.entregas?.filter( _entrega => _entrega.tipo_entrega?.tipo == Constantes.CODIGO_DESCUENTOS).map( _entrega  => _entrega.cuotas_sum_monto_cuota );
-            const descuentosTamano = descuentos.length;
-
+            const adelantos = columnasFecha?.map( fecha_registro => {
+                const montoEncontrado = item?.entregas?.find( item => item.fecha_registro === fecha_registro )?.monto_registrado ?? "";
+                    return {
+                        [`adelanto_${fecha_registro}`] :  montoEncontrado
+                    };
+                }).reduce(function(result, item) {
+                    const key = Object.keys(item)[0]; //first property: a, b, c
+                    result[key] = item[key];
+                    return result;
+                }, {});;
+            
             return {
                 codigo_unico: item.empleado?.codigo_unico,
-                trabajador:  item.empleado?.nombres,
+                trabajador: `${item.empleado?.nombres}, ${item.empleado?.apellido_paterno} ${item.empleado?.apellido_materno}`,
+                empresa: item.empleado?.empresa?.razon_social,
                 total_horas: item?.asistencias_sum_total_horas,
+                costo_horas: item?.costo_hora,
                 total_pagar: item?.salario,
-                adelanto_1: adelantosTamano >= 1 ? adelantos[0] : "",
-                adelanto_2: adelantosTamano >= 2 ? adelantos[1] : "",
-                adelanto_3: adelantosTamano >= 3 ? adelantos[2] : "",
-                adelanto_resto: adelantosTamano >= 4 ? adelantos.reduce((acumulador, actual, actualIndex) =>  actualIndex >= 3 ? acumulador + actual : 0, 0) : "",
-                descuento_1: descuentosTamano >= 1 ? descuentos[0] : "",
-                descuento_resto:  descuentosTamano >= 2 ? descuentos.reduce((acumulador, actual, actualIndex) =>  actualIndex >= 1 ? acumulador + actual : 0, 0) : "",
+                ...adelantos,
+                descuento_planilla: item?.descuento_planilla,
                 adicional_dif: "",
                 t_adel_b: "",
                 neto_pagar: "",
                 act: "",
                 total: "",
-                vb: ""
+                vb: "",
+                numero_documento: item?.empleado?.numero_documento
             };
         });
     };
@@ -128,13 +168,12 @@ export const useReporteAsistenciaRegistro = () => {
             return;
         }
 
-        console.log({
-            worksheets
-        })
         saveExcel({
             fileName: "Reporte de Asistencias",
             workSheets : worksheets
         });
+
+        //setWorksheets(null);
     }, [worksheets]);
 
     return {

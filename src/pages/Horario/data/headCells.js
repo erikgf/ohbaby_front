@@ -10,6 +10,12 @@ export const headCells = [
       align: 'left',
       disablePadding: false,
       label: 'Nombre Horario',
+    },
+    {
+      id: 'total_horas_semana',
+      align: 'right',
+      disablePadding: false,
+      label: 'Horas Semana',
     }
   ];
   

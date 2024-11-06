@@ -22,8 +22,8 @@ export const usePersonal = ()=>{
                     id: contrato.backend ? contrato?.id : null,
                     fecha_inicio: contrato.fechaInicio,
                     salario: contrato.salario,
-                    dias_trabajo: contrato.diasTrabajo,
-                    horas_dia: contrato.horasDia
+                    id_horario: contrato.idHorario,
+                    descuento_planilla: contrato.descuentoPlanilla
                 }
             })
         };

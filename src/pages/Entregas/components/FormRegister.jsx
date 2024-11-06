@@ -11,17 +11,16 @@ import { useHandleCuotas } from "../hooks/useHandleCuotas";
 
 export const FormRegister = () => {
     const { openModal, seleccionado, cargandoGuardar, defaultValuesForm, onGuardarRegistro, onCloseModal } = useEntregas();
-    const { onAgregarCuotas, onQuitarCuota, onActualizarCuota, onDistribuirEquitativamente, onActualizarMontoTotal, onRefrescarFechaCuotas} = useHandleCuotas();
+    const { onAgregarCuotas, onQuitarCuota, onActualizarCuota } = useHandleCuotas();
     const { data : tipoEntregas, cargando: cargandoTipoEntregas  } = useTipoEntregaBean({loadFromStart: true});
     const { data : listaPersonal, loading: cargandoPersonal, setSearchTerm : setBuscarTermPersona } = useBuscarPersonal();
     const { valuesForm, assignValueForm, resetValueForm } = useForm({defaultValuesForm});
     const [cantidadCuotas, setCantidadCuotas] = useState(1);
 
     useEffect(()=>{
-        if (Boolean(seleccionado?.id)){
+        if (Boolean(seleccionado?.isEditando)){
             resetValueForm({
                 ...seleccionado,
-                cuotas : onRefrescarFechaCuotas(seleccionado.fecha_registro, seleccionado?.cuotas)
             });
             return;
         }
@@ -41,20 +40,16 @@ export const FormRegister = () => {
     }, [openModal]);
 
     const titleModal = useMemo(()=>{
-        return `${ !Boolean( seleccionado?.id ) ? 'Nuevo' : 'Editando'} Registro`;
+        return `${ !Boolean( seleccionado?.isEditando ) ? 'Nuevos' : 'Editando'} Registros`;
     }, [seleccionado]);
 
     const handleNuevaCuota = () => {
-        assignValueForm( "cuotas", onAgregarCuotas(cantidadCuotas, valuesForm?.fecha_registro, valuesForm?.cuotas) );
+        assignValueForm( "cuotas", onAgregarCuotas(cantidadCuotas, valuesForm?.cuotas) );
     };
 
     const handleActualizarCuota = (newCuota) => {
         assignValueForm( "cuotas",  onActualizarCuota(newCuota, valuesForm?.cuotas));
     };
-
-    const handleDistribuirEquitativamente = () => {
-        assignValueForm( "cuotas",  onDistribuirEquitativamente(valuesForm.monto_registrado, valuesForm?.cuotas));
-    }
 
     const handleQuitarTodasCuotas = () => {
         assignValueForm( "cuotas",  [] );
@@ -64,17 +59,12 @@ export const FormRegister = () => {
         assignValueForm( "cuotas",  onQuitarCuota(cuota, valuesForm?.fecha_registro, valuesForm?.cuotas));
     };
 
-
-    useEffect(()=> {
-        assignValueForm("monto_registrado", parseFloat(onActualizarMontoTotal(valuesForm?.cuotas)).toFixed(2));
-    }, [valuesForm?.cuotas]);
-
     return (
         <ModalRegister 
                 modalTitle = { titleModal }
                 okButtonText = 'Guardar'
                 open = { openModal }
-                maxWidth="sm"
+                maxWidth="md"
                 handleModalClose = {()=>{
                     onCloseModal();
                 }}
@@ -101,7 +91,7 @@ export const FormRegister = () => {
                                     />
                             </Grid>
                             
-                            <Grid item  xs={12} md={4}>
+                            <Grid item  xs={12} md={3}>
                                 <TextField
                                     label="Tipo de Entrega"
                                     size="small"
@@ -124,24 +114,7 @@ export const FormRegister = () => {
                                     }
                                 </TextField>
                             </Grid>
-
-                            <Grid item  xs={12} md={4}>
-                                <TextField
-                                    label="Fecha Registro"
-                                    size="small"
-                                    margin="dense"
-                                    type="date"
-                                    fullWidth
-                                    InputLabelProps={{shrink: true}}
-                                    required
-                                    value = {valuesForm?.fecha_registro ?? ""}
-                                    onChange={ (e)=>{
-                                        assignValueForm("fecha_registro", e.target.value);
-                                    }}
-                                />
-                            </Grid>
                             <Grid item md={12}>
-                                <Typography mb={2} component="p" variant="caption">Se asignarán cuotas desde el siguiente mes acorde al fecha de registro.</Typography>
                                 <Table padding="none">
                                     <TableHead>
                                         <TableRow>
@@ -156,11 +129,9 @@ export const FormRegister = () => {
                                                 </IconButton>
                                             </TableCell>
                                             <TableCell width={70} align="center">N°</TableCell>
-                                            <TableCell align="center" >Mes Cuota</TableCell>
-                                            <TableCell align="right">
-                                                Monto Cuota
-                                                <Typography onClick = {handleDistribuirEquitativamente} component="div" className="link" variant="caption">Distribuir equitativamente</Typography>
-                                            </TableCell>
+                                            <TableCell align="left">Fecha Registro</TableCell>
+                                            <TableCell align="left">Motivo Registro</TableCell>
+                                            <TableCell align="right">Monto Cuota</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
@@ -179,8 +150,41 @@ export const FormRegister = () => {
                                                             <TableCell align="center" width={70}>
                                                                 { index + 1}
                                                             </TableCell>
-                                                            <TableCell align="center">
-                                                                { item?.fecha_cuota ?? "" }
+                                                            <TableCell align="left">
+                                                                <TextField 
+                                                                    type="date"
+                                                                    size="small"
+                                                                    margin="dense"
+                                                                    value= { item?.fecha_cuota ?? ""}
+                                                                    InputLabelProps={
+                                                                        { shrink: true }
+                                                                    }
+                                                                    onChange={ (e)=>{
+                                                                        handleActualizarCuota({
+                                                                            ...item,
+                                                                            fecha_cuota:  e.target.value
+                                                                        });
+                                                                    }}
+                                                                    />
+                                                            </TableCell>
+                                                            <TableCell align="left" >
+                                                                <TextField 
+                                                                    multiline
+                                                                    rows={2}
+                                                                    fullWidth
+                                                                    size="small"
+                                                                    margin="dense"
+                                                                    value= { item?.motivo_registro ?? ""}
+                                                                    onFocus={(e) => {
+                                                                        e.target.select()
+                                                                    }}
+                                                                    onChange={ (e)=>{
+                                                                        handleActualizarCuota({
+                                                                            ...item,
+                                                                            motivo_registro:  e.target.value
+                                                                        });
+                                                                    }}
+                                                                    />
                                                             </TableCell>
                                                             <TableCell align="right">
                                                                 <TextField
@@ -217,57 +221,43 @@ export const FormRegister = () => {
                                             })
                                         }
                                     </TableBody>
-                                    <TableFooter>
-                                        <TableRow>
-                                            <TableCell colSpan={2}>
-                                                <Button 
-                                                    size="small" 
-                                                    type="button" 
-                                                    color="primary" 
-                                                    variant="contained" 
-                                                    sx={{margin: 1, pl: 3, pr: 3}} endIcon={<MdAdd />} 
-                                                    disabled = { !Boolean(valuesForm?.fecha_registro) }
-                                                    onClick={handleNuevaCuota}>
-                                                Agregar Cuotas(s)
-                                                </Button>
-                                            </TableCell>
-                                            <TableCell align="left">
-                                                <TextField 
-                                                        size="small"
-                                                        margin="dense"
-                                                        value={cantidadCuotas}
-                                                        sx={{width: 50}}
-                                                        onChange={(e)=>{
-                                                            if (!Boolean(e.target.value) || e.target.value <= 0){
-                                                                setCantidadCuotas("");
-                                                                return;
-                                                            }
-                                                            setCantidadCuotas(e.target.value)
-                                                        }}
-                                                        />
-                                            </TableCell>
-                                            <TableCell align="right">
-                                                <Typography variant="h6">S/{valuesForm?.monto_registrado ?? ""}</Typography>
-                                            </TableCell>
-                                        </TableRow>
-                                    </TableFooter>
+                                    {
+                                        !Boolean(seleccionado?.isEditando) &&
+                                            <TableFooter>
+                                                <TableRow>
+                                                    <TableCell colSpan={3} padding="normal">
+                                                        <Button 
+                                                            type="button" 
+                                                            color="primary" 
+                                                            fullWidth
+                                                            variant="contained" 
+                                                            sx={{ pl: 3, pr: 3 }} endIcon={<MdAdd />} 
+                                                            onClick={handleNuevaCuota}>
+                                                        Agregar Cuotas(s)
+                                                        </Button>
+                                                    </TableCell>
+                                                    <TableCell align="left">
+                                                        <TextField 
+                                                                size="small"
+                                                                margin="dense"
+                                                                value={cantidadCuotas}
+                                                                fullWidth
+                                                                sx={{width: 100}}
+                                                                onChange={(e)=>{
+                                                                    if (!Boolean(e.target.value) || e.target.value <= 0){
+                                                                        setCantidadCuotas("");
+                                                                        return;
+                                                                    }
+                                                                    setCantidadCuotas(e.target.value)
+                                                                }}
+                                                                />
+                                                    </TableCell>
+                                                    <TableCell></TableCell>
+                                                </TableRow>
+                                            </TableFooter>
+                                    }
+                                    
                                 </Table>
-                            </Grid>
-                            <Grid item  xs={12}>
-                                <TextField
-                                    label="Motivo del Registro"
-                                    size="small"
-                                    margin="dense"
-                                    type="text"
-                                    multiline
-                                    rows={2}
-                                    fullWidth
-                                    InputLabelProps={{shrink: true}}
-                                    value = {valuesForm?.motivo ?? ""}
-                                    onChange={ (e)=>{
-                                        assignValueForm("motivo", e.target.value);
-                                    }}
-                                />
                             </Grid>
                         </Grid>
                     </CardContent>

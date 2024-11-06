@@ -9,8 +9,8 @@ export const useForm = ({defaultValuesForm})=>{
         });
     };
 
-    const resetValueForm = (valuesFormToRest = defaultValuesForm)=>{
-        setValuesForm(valuesFormToRest);
+    const resetValueForm = (valuesFormToReset = defaultValuesForm)=>{
+        setValuesForm(valuesFormToReset);
     };
 
     return {

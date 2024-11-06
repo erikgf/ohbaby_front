@@ -37,7 +37,8 @@ export const startingGuardar = ({dataForm, id})=>{
     return async ( dispatch )=>{
         dispatch( startGuardar() );
         try {
-            const data = !Boolean(id) 
+            const isEditando = Boolean(id);
+            const data = !isEditando
                             ? await insertEntrega(dataForm)
                             : await updateEntrega({id, data: dataForm});
             dispatch( okGuardar(data) );

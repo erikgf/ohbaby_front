@@ -34,7 +34,7 @@
 }
 
 body {
-  background: linear-gradient(60deg, #080e58, #3fa2db, #217fb0, #141d84, #141d84);
+  background: linear-gradient(60deg, #080e58, #2539af, #0e2e8e, #141d84, #141d84);
   background-size: 1000% 1000%;
 
   -webkit-animation: AnimationName 12s ease infinite;
@@ -61,16 +61,19 @@ body {
 body {
   margin: 0;
   min-width: 320px;
-  min-height: 96.5vh;
-  height: 100vh;
+  min-height: 100vh;
 }
 
 #root{
   max-width: 1280px;
+  min-height: 100vh;
   margin: 0 auto;
-  height: 100vh;
   background-color: white;
   background-image: url("assets/logo-main-ma.png");
   background-repeat:no-repeat;
   background-position: center center;
+}
+
+input:read-only{
+  background-color: #b8b8b8de !important;
 }

@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, Divider, Grid, TextField, Typography } from "@mui/material";
+import { Box, Card, CardContent, CardHeader, Divider, Grid, MenuItem, TextField, Typography } from "@mui/material";
 import { ModalRegister } from "../../../components";
 import { useForm } from "../../../hooks/useForm";
 import { useEffect, useState } from "react";
@@ -7,34 +7,44 @@ import { recalcularCostosDiaHora } from "../data/recalcularCostosDiaHora";
 import { AutocompleteOnline } from "../../../components/AutocompleteOnline/AutocompleteOnline";
 import { useBuscarPersonalComparacion } from "../hooks/useBuscarPersonalComparacion";
 import { PersonalCompara } from "./PersonalCompara";
+import { useHorariosBean } from "../../../hooks";
+import Constantes from "../../../data/constantes";
 
 const modalTitle = "Agregar Contrato", modalTitleEditar = "Editar Contrato";
 
+const defaultValuesForm = {
+    id: null,
+    fechaInicio: "",
+    descuentoPlanilla: "0.00",
+    idHorario : null,
+    salario : "0.00",
+    horasSemana: "0",
+    diasTrabajo : Constantes.DIAS_TRABAJO_MENSUAL,
+    horasDia: "0",
+    costoDia: "0.00",
+    costoHora: "0.00"
+};
 
 export const ModalRegistroContratos = () => {
     const { openModalContrato, contrato, onCerrarContrato, onAgregarContrato, onModificarContrato } = usePersonalContrato();
+    const { data: listaHorarios } = useHorariosBean();
     const [ personalCompara, setPersonalCompara ] = useState(null);
     const { data : listaPersonalCompara, loading: cargandoPersonalCompara, setSearchTerm : setBuscarTermPersonalCompara } = useBuscarPersonalComparacion();
-    const { valuesForm, assignValueForm, resetValueForm } = useForm({
-        id: null,
-        fechaInicio: "",
-        salario : "0.00",
-        diasTrabajo : "0",
-        horasDia: "0",
-        costoDia: "0.00",
-        costoHora: "0.00"
-    });
+    const { valuesForm, assignValueForm, resetValueForm } = useForm({defaultValuesForm});
 
     useEffect(()=>{
-        if (Boolean(contrato)){
-            const { id, fechaInicio, salario, diasTrabajo, horasDia } = contrato;
-            const { costoDia, costoHora } = recalcularCostosDiaHora( salario, diasTrabajo, horasDia);
+        if (Boolean(contrato?.id)){
+            const { id, fechaInicio, descuentoPlanilla, salario, idHorario, diasTrabajo, horasSemana } = contrato;
+            const { horasDia, costoDia, costoHora } = recalcularCostosDiaHora( salario, diasTrabajo, horasSemana);
 
             resetValueForm({
                 id,
                 fechaInicio,
+                descuentoPlanilla,
                 salario,
+                idHorario,
                 diasTrabajo,
+                horasSemana,
                 horasDia,
                 costoDia,
                 costoHora
@@ -42,6 +52,15 @@ export const ModalRegistroContratos = () => {
             return;
         }
     }, [contrato]);
+
+    useEffect(()=>{
+        if (!Boolean(valuesForm?.idHorario )){
+            return;
+        }
+
+        const horario = listaHorarios?.find( item => item.id === valuesForm?.idHorario);
+        assignValueForm("horasSemana", horario?.total_horas_semana);
+    }, [valuesForm?.idHorario]);
 
     useEffect(()=>{
         if (openModalContrato === false){
@@ -52,12 +71,12 @@ export const ModalRegistroContratos = () => {
     useEffect(()=>{
         return setPersonalCompara(null);
     }, []);
-
+    
     return <ModalRegister
                 modalTitle = { !Boolean(contrato?.id) ? modalTitle : modalTitleEditar}
                 okButtonText = 'Guardar'
                 open = { openModalContrato }
-                maxWidth="sm"
+                maxWidth="md"
                 handleModalClose = {()=>{
                     onCerrarContrato();
                 }}
@@ -68,7 +87,6 @@ export const ModalRegistroContratos = () => {
                     } else {
                         onAgregarContrato(valuesForm);
                     }
-                    
                 }}
             >
             <Card>
@@ -94,7 +112,7 @@ export const ModalRegistroContratos = () => {
             </Card>
             <Divider sx={{mb: 2}} />
             <Grid container spacing={2}>
-                <Grid item  xs={12} md={4}>
+                <Grid item  xs={12} md={3}>
                     <TextField
                         label="F. Inicio"
                         size="small"
@@ -102,7 +120,7 @@ export const ModalRegistroContratos = () => {
                         type="date"
                         autoFocus
                         fullWidth
-                        InputLabelProps={ { shrink : true }}
+                        InputLabelProps={{ shrink : true }}
                         required
                         value = {valuesForm?.fechaInicio ?? ""}
                         onChange={ (e)=>{
@@ -110,9 +128,53 @@ export const ModalRegistroContratos = () => {
                         }}
                     />
                 </Grid>
+                <Grid item  xs={12} md={2}>
+                    <TextField
+                        label="Descuento Planilla"
+                        size="small"
+                        margin="dense"
+                        type="number"
+                        autoFocus
+                        fullWidth
+                        value = {valuesForm?.descuentoPlanilla ?? "0.00"}
+                        onChange={ (e)=>{
+                            assignValueForm("descuentoPlanilla", e.target.value);
+                        }}
+                    />
+                </Grid>
+                <Grid item  xs={12} md={6}>
+                    <TextField
+                        label="Horarios"
+                        size="small"
+                        margin="dense"
+                        fullWidth
+                        select
+                        required
+                        value = {valuesForm?.idHorario ?? ""}
+                        onChange={ (e)=>{
+                            assignValueForm("idHorario", e.target.value);
+                        }}
+                    >
+                        <MenuItem value="" disabled><em>Seleccionar horario</em></MenuItem>
+                        {
+                            listaHorarios?.map( item  => {
+                                return <MenuItem key={item.id} value={item.id}>
+                                            <Box>
+                                            <Typography fontWeight="bold" variant="body1">{item.descripcion}</Typography>
+                                            {
+                                                item?.detalles?.map( (_item, index)  => {
+                                                    return <Typography key={_item.id} variant={"body2"}>{index + 1 }) {_item.dias.map( _ => _.descripcion).join(",")} | {_item?.horaInicio} - {_item?.horaFin}</Typography>
+                                                })
+                                            }
+                                            </Box>
+                                        </MenuItem>
+                            })
+                        }
+                    </TextField>
+                </Grid>
             </Grid>
             <Grid container spacing={2}>
-                <Grid item  xs={12} md={3}>
+                <Grid item  xs={12} md={2}>
                     <TextField
                             label="Salario"
                             size="small"
@@ -123,21 +185,22 @@ export const ModalRegistroContratos = () => {
                             value = {valuesForm?.salario ?? "0.00"}
                             onChange={ (e)=>{
                                 const salario = e.target.value ?? "0";
-                                const { costoDia, costoHora } = recalcularCostosDiaHora( 
+                                const { horasDia, costoDia, costoHora } = recalcularCostosDiaHora( 
                                         salario,
                                         valuesForm?.diasTrabajo, 
-                                        valuesForm?.horasDia);
+                                        valuesForm?.horasSemana);
 
                                 resetValueForm({
                                     ...valuesForm, 
                                     salario,
+                                    horasDia,
                                     costoDia,
                                     costoHora
                                 });
                             }}
                         />
                 </Grid>
-                <Grid item  xs={12} md={3}>
+                <Grid item  xs={12} md={2}>
                     <TextField
                         label="Días Trabajo"
                         size="small"
@@ -146,23 +209,26 @@ export const ModalRegistroContratos = () => {
                         fullWidth
                         required
                         value = {valuesForm?.diasTrabajo ?? "0"}
-                        onChange={ (e)=>{
-                            const diasTrabajo = e.target.value ?? "0";
-                            const { costoDia, costoHora } = recalcularCostosDiaHora( 
-                                    valuesForm?.salario,
-                                    diasTrabajo, 
-                                    valuesForm?.horasDia);
-
-                            resetValueForm({
-                                ...valuesForm, 
-                                diasTrabajo,
-                                costoDia,
-                                costoHora
-                            });
-                        }}
+                        inputProps={
+                            {readOnly: true}
+                        }
                     />
                 </Grid>
-                <Grid item xs={12} sm={3}>
+                <Grid item  xs={12} md={2}>
+                    <TextField
+                        label="Horas Semana"
+                        size="small"
+                        margin="dense"
+                        type="number"
+                        fullWidth
+                        required
+                        value = {valuesForm?.horasSemana ?? "0.00"}
+                        inputProps={
+                            {readOnly: true}
+                        }
+                    />
+                </Grid>
+                <Grid item xs={12} sm={2}>
                     <TextField
                         label="Horas al Día"
                         size="small"
@@ -171,54 +237,31 @@ export const ModalRegistroContratos = () => {
                         fullWidth
                         required
                         value = {valuesForm?.horasDia ?? "0"}
-                        onChange={ (e)=>{
-                            const horasDia = e.target.value ?? "0";
-                            const { costoDia, costoHora } = recalcularCostosDiaHora( 
-                                    valuesForm?.salario,
-                                    valuesForm?.diasTrabajo, 
-                                    horasDia);
-
-                            resetValueForm({
-                                ...valuesForm, 
-                                horasDia,
-                                costoDia,
-                                costoHora
-                            });
-                        }}
+                        inputProps={
+                            {readOnly: true}
+                        }
                         />
                 </Grid>
-            </Grid>
-            <Grid container spacing={2}>
-                <Grid item xs={12} sm={3}>
+                <Grid item xs={12} sm={2}>
                     <TextField
                         label="Costo Día"
                         size="small"
                         margin="dense"
                         type="text"
                         fullWidth
-                        InputProps={{
-                            style: {
-                                backgroundColor: '#b8b8b8de'
-                            }
-                        }}
                         inputProps={
                             {readOnly: true}
                         }
                         value = {valuesForm?.costoDia ?? "0.00"}
                         />
                 </Grid>
-                <Grid item xs={12} sm={3}>
+                <Grid item xs={12} sm={2}>
                     <TextField
                         label="Costo Hora"
                         size="small"
                         margin="dense"
                         type="text"
                         fullWidth
-                        InputProps={{
-                            style: {
-                                backgroundColor: '#b8b8b8de'
-                            }
-                        }}
                         inputProps={
                             {readOnly: true}
                         }

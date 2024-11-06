@@ -18,10 +18,14 @@ export const useExcel = () => {
             //Cabecera
             worksheet.getRow(1).font = { bold: true, color: {argb: "ffffff"}};
             worksheet.getRow(1).eachCell({ includeEmpty: false }, function(cell) {
+                const columnKey = cell._column._key;
+                const fgColor = columns.find( item => {
+                    return item.key === columnKey
+                })?.fgColor ?? "04195f" ;
                 worksheet.getCell(cell.address).fill = {
                     type: "pattern",
                     pattern: "solid",
-                    fgColor: { argb: "04195f" },
+                    fgColor: { argb: fgColor}, //#E97132
                 }
             });
 

@@ -534,7 +534,7 @@ export const FormRegister = () => {
                                                     <TableCell sx={{fontWeight: 'bold'}}>Días Trabajo</TableCell>
                                                     <TableCell sx={{fontWeight: 'bold'}}>Horas Día</TableCell>
                                                     <TableCell sx={{fontWeight: 'bold'}}>Costo Día</TableCell>
-                                                    <TableCell sx={{fontWeight: 'bold'}}>Costo Hora</TableCell>
+                                                    <TableCell sx={{fontWeight: 'bold'}}>Dscto. Planilla</TableCell>
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
@@ -560,7 +560,7 @@ export const FormRegister = () => {
                                                                 <TableCell align="right">{contrato.diasTrabajo}</TableCell>
                                                                 <TableCell align="right">{contrato.horasDia}</TableCell>
                                                                 <TableCell align="right">S/ {contrato.costoDia}</TableCell>
-                                                                <TableCell align="right">S/ {contrato.costoHora}</TableCell>
+                                                                <TableCell align="right">S/ {contrato?.descuentoPlanilla}</TableCell>
                                                             </TableRow>
                                                         })
                                                     :   <TableRow>

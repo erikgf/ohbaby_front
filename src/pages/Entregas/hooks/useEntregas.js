@@ -18,14 +18,27 @@ export const useEntregas = ()=>{
     };
 
     const onGuardarRegistro = async (dataForm)=>{
-        dispatch(startingGuardar({ dataForm: {
-            fecha_registro: dataForm.fecha_registro,
-            monto_registrado: dataForm.monto_registrado,
-            motivo: dataForm.motivo,
-            id_tipo_entrega: dataForm.tipo_entrega.id,
-            id_empleado_contrato: dataForm.empleado_contrato.id,
-            cuotas: dataForm.cuotas
-        }, id: seleccionado?.id}));
+        if (seleccionado?.isEditando){
+            const [registroEditar] = dataForm.cuotas;
+            console.log({dataForm})
+            dispatch(startingGuardar({
+                dataForm: {
+                    id_tipo_entrega: dataForm.tipo_entrega.id,
+                    id_empleado_contrato: dataForm.empleado_contrato?.id,
+                    ...registroEditar
+                },
+                id: registroEditar.id
+            }));
+            return;
+        }
+
+        dispatch(startingGuardar({
+            dataForm: {
+                id_tipo_entrega: dataForm.tipo_entrega.id,
+                id_empleado_contrato: dataForm.empleado_contrato.id,
+                cuotas: dataForm.cuotas
+            }
+        }));
     };
 
     const onLeerRegistro = async ({id})=>{

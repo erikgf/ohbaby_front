@@ -6,11 +6,13 @@ export const usePersonalContrato = () => {
     const dispatch = useDispatch();
     const { openModalContrato, contrato } = useSelector(state=>state.personal);
 
-    const onAgregarContrato = ( { fechaInicio, salario, diasTrabajo, horasDia, costoDia, costoHora }) => {
+    const onAgregarContrato = ( { fechaInicio, salario, descuentoPlanilla, idHorario, diasTrabajo, horasDia, costoDia, costoHora }) => {
         dispatch ( agregarContrato({
             id: new Date().getTime(), 
             backend: false,
             fechaInicio, salario : parseFloat(salario).toFixed(2), 
+            descuentoPlanilla,
+            idHorario,
             diasTrabajo, horasDia,
             costoDia, costoHora
         }) );

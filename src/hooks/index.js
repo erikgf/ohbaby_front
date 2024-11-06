@@ -7,3 +7,4 @@ export * from './useUbigeoDepartamentosBean';
 export * from './useUbigeoProvinciasBean';
 export * from './useUbigeoDistritosBean';
 export * from './useUI';
+export * from './useHorariosBean';
