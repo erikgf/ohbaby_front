@@ -13,6 +13,7 @@ import useConfirm from "../../../hooks/useConfirm";
 import { useEmpresasBean } from "../../../hooks";
 import { ModalFinalizarContrato } from "./ModalFinalizarContrato";
 import { useState } from "react";
+import mensajes from "../../../data/mensajes";
 
 export const FormRegister = () => {
     const { openModal, seleccionado, cargandoGuardar, onGuardarRegistro, onCloseModal } = usePersonal();
@@ -25,6 +26,10 @@ export const FormRegister = () => {
     const [isFinalizandoContrato, setIsFinalizandoContrato] = useState(false);
     const { confirm } = useConfirm();
     
+    
+    const titleModal = useMemo(()=>{
+        return `${ !Boolean( seleccionado?.id ) ? 'Nuevo' : 'Editando'} Personal`;
+    }, [seleccionado]);
     const puedoAgregarNuevoContrato = Boolean(!valuesForm?.contratos?.length || valuesForm?.contratos?.find( c => Boolean(c.fechaFin)));
     const existeContratoValido = valuesForm?.contratos?.find( c => !Boolean(c.fechaFin));
 
@@ -54,6 +59,7 @@ export const FormRegister = () => {
             const provincia_ubigeo = distritoUbigeo?.substr(0, 4) ?? "";
             const distrito_ubigeo  = distritoUbigeo ?? "";
 
+            /*
             if (departamento_ubigeo != ""){
                 onListarProvincias({
                     idDepartamento : departamento_ubigeo
@@ -63,6 +69,7 @@ export const FormRegister = () => {
                     idProvincia : provincia_ubigeo
                 });
             }
+            */
 
             resetValueForm({
                 id_tipo_documento : idTipoDocumento.substr(0, 1),
@@ -109,19 +116,27 @@ export const FormRegister = () => {
         }
     }, [openModal]);
 
-    const titleModal = useMemo(()=>{
-        return `${ !Boolean( seleccionado?.id ) ? 'Nuevo' : 'Editando'} Personal`;
-    }, [seleccionado]);
+    useEffect(()=>{
+        if (valuesForm?.departamento_ubigeo != ""){
+            onListarProvincias({ idDepartamento: valuesForm?.departamento_ubigeo});
+        }
+    }, [valuesForm?.departamento_ubigeo]);
 
-    const handleFinalizarContrato = async ( fechaCese ) =>{
+    useEffect(()=>{
+        if (valuesForm?.provincia_ubigeo != ""){
+            onListarDistritos({ idProvincia: valuesForm?.provincia_ubigeo});
+        }
+    }, [valuesForm?.provincia_ubigeo]);
+
+    const handleFinalizarContrato = async ( { fechaFinalizacion, observacionFinalizacion } ) =>{
         const { id } = existeContratoValido;
         const isConfirmed = await confirm({
-                title: 'Finalizar Contrato', 
-                description: '¿Desea finalizar el contrato seleccionado? Esta acción es irreversible.'
+                title: mensajes.ROTULO_FINALIZAR_CONTRATO, 
+                description: mensajes.ESTA_SEGURO_FINALIZAR_CONTRATO 
             });
 
         if (isConfirmed){
-            onFinalizarContrato({id, fechaCese});
+            onFinalizarContrato({id, fechaCese: fechaFinalizacion, razonCese: observacionFinalizacion});
             return;
         }
     };
@@ -185,12 +200,8 @@ export const FormRegister = () => {
                                     margin="dense"
                                     type="text"
                                     fullWidth
-                                    required
-                                    inputProps={ { maxLength: 3 }}
+                                    inputProps={ { maxLength: 3, readOnly: true }}
                                     value = {valuesForm?.codigo_unico ?? ""}
-                                    onChange={ (e)=>{
-                                        assignValueForm("codigo_unico", e.target.value);
-                                    }}
                                 />
                             </Grid>
                             <Grid item xs={12} sm={3}>
@@ -404,7 +415,7 @@ export const FormRegister = () => {
                                     value = { cargandoDeps ? "" : (valuesForm?.departamento_ubigeo ?? "")}
                                     onChange={ (e)=>{
                                         assignValueForm("departamento_ubigeo", e.target.value);
-                                        onListarProvincias({idDepartamento: e.target.value});
+                                        //onListarProvincias({idDepartamento: e.target.value});
                                     }}
                                 >
                                     <MenuItem value=""><em>Seleccionar</em></MenuItem>
@@ -424,7 +435,7 @@ export const FormRegister = () => {
                                     value = {valuesForm?.provincia_ubigeo ?? ""}
                                     onChange={ (e)=>{
                                         assignValueForm("provincia_ubigeo", e.target.value);
-                                        onListarDistritos({idProvincia: e.target.value});
+                                        //onListarDistritos({idProvincia: e.target.value});
                                     }}
                                 >
                                     <MenuItem value=""><em>Seleccionar</em></MenuItem>
@@ -555,7 +566,7 @@ export const FormRegister = () => {
                                                                     </IconButton>
                                                                 </TableCell>
                                                                 <TableCell>{contrato.fechaInicio}</TableCell>
-                                                                <TableCell>{contrato.fechaFin ?? "-"}</TableCell>
+                                                                <TableCell title={contrato.observacionesFinContrato ?? "Sin observaciones."}>{contrato.fechaFin ?? "-"}</TableCell>
                                                                 <TableCell align="right">S/ {contrato.salario}</TableCell>
                                                                 <TableCell align="right">{contrato.diasTrabajo}</TableCell>
                                                                 <TableCell align="right">{contrato.horasDia}</TableCell>

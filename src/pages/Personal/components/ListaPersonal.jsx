@@ -27,9 +27,9 @@ export const ListaPersonal = () => {
 
     const handleEliminarRegistro = async ({id}) =>{
         const isConfirmed = await confirm({
-                        title: 'Eliminar Registro', 
-                        description: '¿Desea eliminar el registro seleccionado? Esta acción es irreversible.'
-                    });
+                    title: 'Eliminar Registro', 
+                    description: '¿Desea eliminar el registro seleccionado? Esta acción es irreversible.'
+                });
         if (isConfirmed){
             onEliminarRegistro({id});
             return;

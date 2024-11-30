@@ -5,15 +5,7 @@ export const PersonalCompara = ({ personal }) => {
     const contrato = personal?.contrato;
     const horarioDetalles = contrato?.horarios;
     const totalHorasMes = parseFloat(contrato?.horas_dia * contrato?.costo_hora);
-    let horarioAsignado = "";
-    if (horarioDetalles){
-        horarioAsignado = `${getDiasFromNumDias(horarioDetalles?.dias)} | ${horarioDetalles?.hora_inicio} - ${horarioDetalles?.hora_fin}`
-    }
-
-    console.log({
-        horarioDetalles
-    })
-
+   
     return <Box mt={2}>
             <Grid container spacing={2}>
                 <Grid item xs={12}>

@@ -1,9 +1,10 @@
 import Excel from 'exceljs';
 import { saveAs } from 'file-saver';
 
+
 export const useExcel = () => {
-    const workbook = new Excel.Workbook();
     const saveExcel = async ({fileName, workSheets}) => {
+      const workbook = new Excel.Workbook();
       const workSheetsCreatedIds = [];
       try {
         workSheets.forEach(({

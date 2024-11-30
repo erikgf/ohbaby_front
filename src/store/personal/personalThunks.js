@@ -74,12 +74,12 @@ export const startingEliminar = ({ id })=>{
     }
 };
 
-export const startingFinalizarContrato = ({ id, fechaCese })=>{ //idContrato
+export const startingFinalizarContrato = ({ id, fechaCese, razonCese })=>{ //idContrato
     return async ( dispatch )=>{
         dispatch( startFinalizarContrato() );
         try {
-            const data = await finalizarContrato(id, fechaCese);
-            dispatch( okFinalizarContrato({id, fecha : data}) );
+            await finalizarContrato(id, fechaCese, razonCese);
+            dispatch( okFinalizarContrato({id, fechaCese, razonCese}) );
             dispatch( setMessage({
                 text: mensajes.CONTRATO_FINALIZADO_CORRECTAMENTE,
                 severity: 'success'

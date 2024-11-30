@@ -38,8 +38,8 @@ export const usePersonalContrato = () => {
         dispatch ( leerContrato (id) );
     };
 
-    const onFinalizarContrato = ({id, fechaCese}) => {
-        dispatch ( startingFinalizarContrato ({id, fechaCese}) );
+    const onFinalizarContrato = ({id, fechaCese, razonCese}) => {
+        dispatch ( startingFinalizarContrato ({id, fechaCese, razonCese}) );
     };
 
     return {

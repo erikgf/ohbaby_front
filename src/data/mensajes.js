@@ -5,7 +5,9 @@ const mensajes = {
     PERSONAL_ASIGNADO_CORRECTAMENTE: "Personal asignado correctamente.",
     CONTRATO_FINALIZADO_CORRECTAMENTE: "Contrato finalizado correctamente.",
     GUARDADO_CORRECTAMENTE: "Guardado correctamente.",
-    ELIMINADO_CORRECTAMENTE: "Eliminado correctamente."
+    ELIMINADO_CORRECTAMENTE: "Eliminado correctamente.",
+    ROTULO_FINALIZAR_CONTRATO: 'Finalizar Contrato',
+    ESTA_SEGURO_FINALIZAR_CONTRATO: '¿Desea finalizar el contrato seleccionado? Esta acción es irreversible.'
 };
 
 export default mensajes;

@@ -11,12 +11,14 @@ export const headCells = [
     disablePadding: false,
     label: 'N. Orden',
   },
+  /*
   {
     id: 'idTipoDocumento',
     align: 'left',
     disablePadding: true,
     label: 'Tipo Documento',
   },
+  */
   {
     id: 'numeroDocumento',
     align: 'left',
@@ -28,6 +30,12 @@ export const headCells = [
     align: 'left',
     disablePadding: false,
     label: 'C. U.',
+  },
+  {
+    id: 'tieneHorarios',
+    align: 'center',
+    disablePadding: false,
+    label: '¿Tiene Horario?'
   },
   {
     id: 'apellidoPaterno',
@@ -52,11 +60,5 @@ export const headCells = [
     align: 'left',
     disablePadding: false,
     label: 'Fec. Nacimiento',
-  },
-  {
-    id: 'pais',
-    align: 'left',
-    disablePadding: false,
-    label: 'País',
   },
 ];

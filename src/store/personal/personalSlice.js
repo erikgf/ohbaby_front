@@ -151,14 +151,15 @@ export const personalSlice = createSlice({
         startFinalizarContrato : ( state ) => {
             state.cargandoFinalizarContrato = true;
         },
-        okFinalizarContrato : ( state, { payload : { id, fecha}} ) => {
+        okFinalizarContrato : ( state, { payload : { id, fechaCese, razonCese}} ) => {
             state.cargandoFinalizarContrato = true;
             if (!Boolean(state.seleccionado)) return;
             state.seleccionado.contratos = state.seleccionado.contratos.map( contrato => {
                 if (contrato.id == id){
                     return {
                         ...contrato,
-                        fechaFin: fecha
+                        fechaFin: fechaCese,
+                        observacionesFinContrato: razonCese
                     };
                 }
 
