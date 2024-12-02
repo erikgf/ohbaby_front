@@ -34,7 +34,10 @@ export const ModalRegistroContratos = () => {
 
     useEffect(()=>{
         if (Boolean(contrato?.id)){
-            const { id, fechaInicio, descuentoPlanilla, salario, idHorario, diasTrabajo, horasSemana } = contrato;
+            console.log({contrato})
+            const { id, fechaInicio, descuentoPlanilla, salario, diasTrabajo, horasSemana } = contrato;
+            const [{id: idHorario}] = contrato.horarios;
+
             const { horasDia, costoDia, costoHora } = recalcularCostosDiaHora( salario, diasTrabajo, horasSemana);
 
             resetValueForm({
