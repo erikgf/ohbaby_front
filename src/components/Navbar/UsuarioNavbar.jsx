@@ -64,9 +64,10 @@ export const UsuarioNavbar = ()=>{
                     open={Boolean(anchorMenuEl)}
                     onClose={handleMenuClose}
                 >
-                    <MenuItem dense divider>{user?.name}</MenuItem>
+                    <MenuItem dense divider>{user?.name} </MenuItem>
                     <MenuItem dense divider onClick={handleCambiarClave}>Cambiar Clave</MenuItem>
-                    <MenuItem dense onClick={handleCerrarSesion}>Cerrar Sesión</MenuItem>
+                    <MenuItem dense divider onClick={handleCerrarSesion}>Cerrar Sesión</MenuItem>
+                    <MenuItem sx={{fontSize: '.75em'}} dense><small>Ver. {APP_VERSION}</small></MenuItem>
                 </Menu>
             </Box>
 }

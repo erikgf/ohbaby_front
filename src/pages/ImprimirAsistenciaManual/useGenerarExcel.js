@@ -82,22 +82,45 @@ const procesarData = (data) => {
         empresa_id : registro.empresa_id,
         empresa_nombre : registro.empresa_nombre,
         fecha,
-        registros : registro?.registros.map ( _registro => {
-            const horas = horarios.find( 
-                    horario => horario.id === _registro.horario_id
-                )
-                ?.horario_detalles
-                ?.filter( horario_detalle => horario_detalle.dias.includes(String(numero_dia)))
-                ?.map ( horario_detalle => ({
-                    hora_inicio: horario_detalle.hora_inicio,
-                    hora_fin: horario_detalle.hora_fin
-                }));
+        registros : registro?.registros
+            ?.filter( _registro => Boolean(_registro?.horario_id) )
+            ?.map ( _registro => {
+                const asistencia = registro?.asistencia;
+                if (Boolean(asistencia)){
+                    const horas = [{
+                        hora_inicio: asistencia?.hora_entrada_mañana,
+                        hora_fin: asistencia?.hora_salida_mañana,
+                    }];
 
-            return {
-                ..._registro,
-                horas,
-            };
-        })
+                    if (Boolean(asistencia?.hora_entrada_tarde)){
+                        horas.push({
+                            hora_inicio: asistencia?.hora_entrada_tarde,
+                            hora_fin: asistencia?.hora_sallida_tarde
+                        });
+                    }
+
+                    return {
+                        empleado_codigo_unico: _registro.empleado_codigo_unico,
+                        empleado_nombres : _registro.empleado_nombres,
+                        horas
+                    };
+                }
+
+                const horas = horarios.find( 
+                        horario => horario.id === _registro.horario_id
+                    )
+                    ?.horario_detalles
+                    ?.filter( horario_detalle => horario_detalle.dias.includes(String(numero_dia)))
+                    ?.map ( horario_detalle => ({
+                        hora_inicio: horario_detalle.hora_inicio,
+                        hora_fin: horario_detalle.hora_fin
+                    }));
+
+                return {
+                    ..._registro,
+                    horas,
+                };
+            })
     }));
 };
 
@@ -218,6 +241,7 @@ export const useGenerarExcel = () => {
       const workSheetsCreatedIds = [];
       try {
         const workSheets = procesarData(data);
+
         workSheets.forEach(({
             empresa_id,
             empresa_nombre,
