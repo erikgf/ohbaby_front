@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const BASE_URL = import.meta.env.VITE_URL_API;
 const SESSION_NAME = import.meta.env.VITE_SESSION_NAME;
-const TIMEOUT = 15000;
+const TIMEOUT = 20000;
 
 export default axios.create({
     timeout: TIMEOUT,
