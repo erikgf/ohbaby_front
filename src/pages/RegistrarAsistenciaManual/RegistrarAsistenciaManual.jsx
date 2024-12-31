@@ -3,6 +3,7 @@ import { useRef, useState } from "react";
 import { MdSearch, MdSave as SaveIcon } from "react-icons/md";
 import { useRegistrarAsistenciaManual } from "./useRegistrarAsistenciaManual";
 import { LoadingButton } from "@mui/lab";
+import { getHoy } from "@/assets/utils";
 
 const inputNames = [
     "turno_uno_entrada",
@@ -46,16 +47,16 @@ const procesarForm = (form, data) => {
     });
 };
 
+const fecha = getHoy();
+
 export const RegistrarAsitenciaManual = () => {
     const formRef = useRef(null);
     const inputFecha = useRef(null);
-    const [fecha, setFecha] = useState("");
     const { cargando, cargandoGuardar, data,
             guardarRegistro, consultarDatosFecha
           } = useRegistrarAsistenciaManual();
-
-          console.log({data});
-
+          
+    console.log({data});
 
     return <Container sx={{pt: 3}}>
             <Grid container spacing={2}>
@@ -84,10 +85,7 @@ export const RegistrarAsitenciaManual = () => {
                                             type = "date"
                                             name="fecha"
                                             autoFocus
-                                            value = { fecha }
-                                            onChange={(e)=> {
-                                                setFecha(e.target.value);
-                                            }}
+                                            defaultValue = { fecha }
                                             InputLabelProps={{shrink: true}}
                                             required
                                             fullWidth
@@ -96,11 +94,12 @@ export const RegistrarAsitenciaManual = () => {
                                 <Grid item sm={12} md={2} alignItems="center" display={"flex"} >
                                     <LoadingButton
                                         onClick={() => {
-                                            consultarDatosFecha(fecha);
+                                            if (!Boolean(inputFecha.current.value)) return;
+                                            consultarDatosFecha(inputFecha.current.value);
                                         }}
                                         color="primary"
                                         type="button"
-                                        disabled = {!Boolean(fecha)}
+                                        //disabled = {!Boolean(fecha)}321
                                         loading = { cargando }
                                         variant="contained"
                                         endIcon={<MdSearch />}
@@ -128,6 +127,16 @@ export const RegistrarAsitenciaManual = () => {
                                                         <TableBody>
                                                         {
                                                             empresa?.registros?.map( item => {
+                                                                let horasMañana = { hora_inicio: "", hora_fin: ""}, 
+                                                                    horasTarde = { hora_inicio: "", hora_fin: ""};
+
+                                                                if (item.horas?.length > 0){
+                                                                    horasMañana = item.horas[0];
+                                                                    if (item.horas.length > 1){
+                                                                        horasTarde = item.horas[1];
+                                                                    }
+                                                                }
+
                                                                 return  <TableRow key = {item.id}>
                                                                             <TableCell align="center">{item.empleado_codigo_unico}</TableCell>
                                                                             <TableCell >{item.empleado_nombres}</TableCell>
@@ -139,9 +148,9 @@ export const RegistrarAsitenciaManual = () => {
                                                                                         type = "time"
                                                                                         name={`turno_uno_entrada_${item.id}`}
                                                                                         InputLabelProps={{shrink: true}}
-                                                                                        defaultValue={ item?.horas[0]?.hora_inicio }
+                                                                                        defaultValue={ horasMañana?.hora_inicio || ""}
                                                                                         inputProps={{
-                                                                                            max: item?.horas[0]?.hora_fin,
+                                                                                            max: horasMañana?.hora_fin,
                                                                                         }}
                                                                                         fullWidth
                                                                                     />
@@ -154,16 +163,16 @@ export const RegistrarAsitenciaManual = () => {
                                                                                         type = "time"
                                                                                         name={`turno_uno_salida_${item.id}`}
                                                                                         InputLabelProps={{shrink: true}}
-                                                                                        defaultValue={ item?.horas[0]?.hora_fin}
+                                                                                        defaultValue={ horasMañana?.hora_fin}
                                                                                         inputProps={{
-                                                                                            max: item?.horas[0]?.hora_fin,
+                                                                                            max: horasMañana?.hora_fin,
                                                                                         }}
                                                                                         fullWidth
                                                                                     />
                                                                             </TableCell>
                                                                             <TableCell>
                                                                                 {
-                                                                                    (item.horas.length > 1  || item.esActualizando) &&
+                                                                                    (item.horas?.length > 1  || item.esActualizando) &&
                                                                                         <TextField 
                                                                                             label="Hora Entrada"
                                                                                             margin="dense"
@@ -173,15 +182,15 @@ export const RegistrarAsitenciaManual = () => {
                                                                                             InputLabelProps={{shrink: true}}
                                                                                             fullWidth
                                                                                             inputProps={{
-                                                                                                max: item?.horas[1]?.hora_fin,
+                                                                                                max: horasTarde?.hora_fin,
                                                                                             }}
-                                                                                            defaultValue={ item?.horas[1]?.hora_inicio || ""}
+                                                                                            defaultValue={ horasTarde?.hora_inicio || ""}
                                                                                         />
                                                                                 }
                                                                             </TableCell>
                                                                             <TableCell>
                                                                                 {
-                                                                                    (item.horas.length > 1  || item.esActualizando) &&
+                                                                                    (item.horas?.length > 1  || item.esActualizando) &&
                                                                                         <TextField 
                                                                                             label="Hora Salida"
                                                                                             margin="dense"
@@ -191,9 +200,9 @@ export const RegistrarAsitenciaManual = () => {
                                                                                             InputLabelProps={{shrink: true}}
                                                                                             fullWidth
                                                                                             inputProps={{
-                                                                                                max: item?.horas[1]?.hora_fin,
+                                                                                                max: horasTarde?.hora_fin,
                                                                                             }}
-                                                                                            defaultValue={ item?.horas[1]?.hora_fin || ""}
+                                                                                            defaultValue={ horasTarde?.hora_fin || ""}
                                                                                         />
                                                                                 }
                                                                             </TableCell>

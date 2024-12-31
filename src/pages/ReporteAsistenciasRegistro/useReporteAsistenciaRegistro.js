@@ -173,7 +173,6 @@ export const useReporteAsistenciaRegistro = () => {
             workSheets : worksheets
         });
 
-        //setWorksheets(null);
     }, [worksheets]);
 
     return {
