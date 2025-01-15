@@ -26,7 +26,7 @@ const columnasWorksheets = {
         { key: "empresa", header: "Empresa", align: "left"},
         { key: "costo_horas", header: "Costo Hora", align: "right", style : { numFmt : formatMoney}},
         { key: "total_horas", header: "Total Horas", align: "right", style : { numFmt : formatNumber}},
-        { key: "total_pagar", header: "Total a Pagar", align: "right", style: { numFmt : formatMoney}},
+        { key: "total_pagar", header: "Total a Pagar", align: "right", style: { numFmt : formatMoney}, formula : "=PRODUCT(D#,E#)"},
         //
         { key: "descuento_planilla", header: "Dscto PLAME", align: "right", style: { numFmt : formatMoney}},
         { key: "t_adel_b", header: "T.Adel y B.", align: "right", style: { numFmt : formatMoney}, formula : "=SUM(E#,K#)"},

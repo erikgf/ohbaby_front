@@ -50,6 +50,7 @@ export const ListaPersonal = () => {
                         isSearchAllowed = {true}
                         isSelectableRows = { false }
                         registersPerPage= {30}
+                        tableWidth = "1400px"
                         strechTable = { true }
                         onActions = {[
                             {

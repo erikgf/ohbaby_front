@@ -61,4 +61,22 @@ export const headCells = [
     disablePadding: false,
     label: 'Fec. Nacimiento',
   },
+  {
+    id: 'fechaIngreso',
+    align: 'left',
+    disablePadding: false,
+    label: 'Fec. Ingreso',
+  },
+  {
+    id: 'costoHora',
+    align: 'left',
+    disablePadding: false,
+    label: 'Costo Hora',
+  },
+  {
+    id: 'horasSemana',
+    align: 'left',
+    disablePadding: false,
+    label: 'Horas Semana',
+  },
 ];

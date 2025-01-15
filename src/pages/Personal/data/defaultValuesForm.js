@@ -9,6 +9,7 @@ export const defaultValuesForm = {
     nombres: "",
     direccion: "",
     fecha_nacimiento: "",
+    fecha_ingreso: "",
     departamento_ubigeo: "",
     provincia_ubigeo: "",
     distrito_ubigeo: "",

@@ -32,6 +32,23 @@ export const FormRegister = () => {
     }, [seleccionado]);
     const puedoAgregarNuevoContrato = Boolean(!valuesForm?.contratos?.length || valuesForm?.contratos?.find( c => Boolean(c.fechaFin)));
     const existeContratoValido = valuesForm?.contratos?.find( c => !Boolean(c.fechaFin));
+    
+    const handleFinalizarContrato = async ( { fechaFinalizacion, observacionFinalizacion } ) =>{
+        const { id } = existeContratoValido;
+        const isConfirmed = await confirm({
+                title: mensajes.ROTULO_FINALIZAR_CONTRATO, 
+                description: mensajes.ESTA_SEGURO_FINALIZAR_CONTRATO 
+            });
+
+        if (isConfirmed){
+            onFinalizarContrato({id, fechaCese: fechaFinalizacion, razonCese: observacionFinalizacion});
+            return;
+        }
+    };
+
+    const handleChangeForm = (e) => {
+        assignValueForm(e.target.name, e.target.value)
+    };
 
     useEffect(()=>{
         if (Boolean(seleccionado?.id)){
@@ -43,6 +60,7 @@ export const FormRegister = () => {
                     nombres,
                     direccion,
                     fechaNacimientoRaw,
+                    fechaIngresoRaw,
                     distritoUbigeo,
                     pais,
                     id_empresa,
@@ -58,18 +76,6 @@ export const FormRegister = () => {
             const departamento_ubigeo = distritoUbigeo?.substr(0, 2) ?? "";
             const provincia_ubigeo = distritoUbigeo?.substr(0, 4) ?? "";
             const distrito_ubigeo  = distritoUbigeo ?? "";
-
-            /*
-            if (departamento_ubigeo != ""){
-                onListarProvincias({
-                    idDepartamento : departamento_ubigeo
-                });
-
-                onListarDistritos({
-                    idProvincia : provincia_ubigeo
-                });
-            }
-            */
 
             resetValueForm({
                 id_tipo_documento : idTipoDocumento.substr(0, 1),
@@ -92,7 +98,8 @@ export const FormRegister = () => {
                 estado_civil : estadoCivil,
                 puesto,
                 telefono_referencia : telefonoReferencia,
-                nombre_familiar : nombreFamiliar
+                nombre_familiar : nombreFamiliar,
+                fecha_ingreso : fechaIngresoRaw
             });
             return;
         }
@@ -128,18 +135,6 @@ export const FormRegister = () => {
         }
     }, [valuesForm?.provincia_ubigeo]);
 
-    const handleFinalizarContrato = async ( { fechaFinalizacion, observacionFinalizacion } ) =>{
-        const { id } = existeContratoValido;
-        const isConfirmed = await confirm({
-                title: mensajes.ROTULO_FINALIZAR_CONTRATO, 
-                description: mensajes.ESTA_SEGURO_FINALIZAR_CONTRATO 
-            });
-
-        if (isConfirmed){
-            onFinalizarContrato({id, fechaCese: fechaFinalizacion, razonCese: observacionFinalizacion});
-            return;
-        }
-    };
 
     return ( <>
         <ModalRegister 
@@ -169,11 +164,10 @@ export const FormRegister = () => {
                                     autoFocus
                                     fullWidth
                                     required
+                                    name = "id_tipo_documento"
                                     select
                                     value = {valuesForm?.id_tipo_documento ?? "D"}
-                                    onChange={ (e)=>{
-                                        assignValueForm("id_tipo_documento", e.target.value);
-                                    }}
+                                    onChange={ handleChangeForm }
                                 >
                                     <MenuItem  value="D">DNI</MenuItem>
                                     <MenuItem  value="C">CE</MenuItem>
@@ -187,10 +181,9 @@ export const FormRegister = () => {
                                     type="text"
                                     fullWidth
                                     required
+                                    name ="numero_documento"
                                     value = {valuesForm?.numero_documento ?? ""}
-                                    onChange={ (e)=>{
-                                        assignValueForm("numero_documento", e.target.value);
-                                    }}
+                                    onChange={ handleChangeForm }
                                 />
                             </Grid>
                             <Grid item  xs={12} md={2}>
@@ -214,9 +207,8 @@ export const FormRegister = () => {
                                     required
                                     disabled = { cargandoEmpresas }
                                     value = { cargandoEmpresas ? "" : (valuesForm?.id_empresa ?? "")}
-                                    onChange={ (e)=>{
-                                        assignValueForm("id_empresa", e.target.value);
-                                    }}
+                                    name = "id_empresa"
+                                    onChange={ handleChangeForm }
                                 >
                                     <MenuItem value=""><em>Seleccionar</em></MenuItem>
                                     {
@@ -233,9 +225,8 @@ export const FormRegister = () => {
                                     type="number"
                                     required
                                     value = {valuesForm?.numero_orden ?? ""}
-                                    onChange={ (e)=>{
-                                        assignValueForm("numero_orden", e.target.value);
-                                    }}
+                                    name = "numero_orden"
+                                    onChange={ handleChangeForm }
                                 />
                             </Grid>
                             <Grid item xs={12} sm={4}>
@@ -247,9 +238,8 @@ export const FormRegister = () => {
                                     fullWidth
                                     required
                                     value = {valuesForm?.nombres ?? ""}
-                                    onChange={ (e)=>{
-                                        assignValueForm("nombres", e.target.value);
-                                    }}
+                                    name = "nombres"
+                                    onChange={ handleChangeForm }
                                     />
                             </Grid>
                             <Grid item xs={12} sm={3}>
@@ -261,9 +251,8 @@ export const FormRegister = () => {
                                     fullWidth
                                     required
                                     value = {valuesForm?.apellido_paterno ?? ""}
-                                    onChange={ (e)=>{
-                                        assignValueForm("apellido_paterno", e.target.value);
-                                    }}
+                                    name="apellido_paterno"
+                                    onChange={ handleChangeForm }
                                     />
                             </Grid>
                             <Grid item xs={12} sm={3}>
@@ -275,9 +264,8 @@ export const FormRegister = () => {
                                     fullWidth
                                     required
                                     value = {valuesForm?.apellido_materno ?? ""}
-                                    onChange={ (e)=>{
-                                        assignValueForm("apellido_materno", e.target.value);
-                                    }}
+                                    name = "apellido_materno"
+                                    onChange={ handleChangeForm }
                                     />
                             </Grid>
                             <Grid item xs={12} sm={2}>
@@ -289,10 +277,9 @@ export const FormRegister = () => {
                                     fullWidth
                                     InputLabelProps={{shrink: true}}
                                     required
+                                    name="fecha_nacimiento"
                                     value = {valuesForm?.fecha_nacimiento ?? ""}
-                                    onChange={ (e)=>{
-                                        assignValueForm("fecha_nacimiento", e.target.value);
-                                    }}
+                                    onChange={ handleChangeForm }
                                     />
                             </Grid>
                             <Grid item xs={12} sm={2}>
@@ -303,9 +290,8 @@ export const FormRegister = () => {
                                     type="tel"
                                     fullWidth
                                     value = {valuesForm?.celular ?? ""}
-                                    onChange={ (e)=>{
-                                        assignValueForm("celular", e.target.value);
-                                    }}
+                                    name="celular"
+                                    onChange={ handleChangeForm }
                                 />
                             </Grid>
                             <Grid item xs={12} sm={2}>
@@ -317,9 +303,8 @@ export const FormRegister = () => {
                                     fullWidth
                                     required
                                     value = {valuesForm?.sexo ?? ""}
-                                    onChange={ (e)=>{
-                                        assignValueForm("sexo", e.target.value);
-                                    }}
+                                    name="sexo"
+                                    onChange={ handleChangeForm }
                                 >
                                     <MenuItem value="" disabled><em>Seleccionar</em></MenuItem>
                                     <MenuItem value="M">Masculino</MenuItem>
@@ -335,9 +320,8 @@ export const FormRegister = () => {
                                     fullWidth
                                     required
                                     value = {valuesForm?.estado_civil ?? ""}
-                                    onChange={ (e)=>{
-                                        assignValueForm("estado_civil", e.target.value);
-                                    }}
+                                    name="estado_civil"
+                                    onChange={ handleChangeForm }
                                 >
                                     <MenuItem value="" disabled><em>Seleccionar</em></MenuItem>
                                     <MenuItem value="S">Soltero</MenuItem>
@@ -354,10 +338,23 @@ export const FormRegister = () => {
                                     type="text"
                                     fullWidth
                                     required
+                                    name="puesto"
                                     value = {valuesForm?.puesto ?? ""}
-                                    onChange={ (e)=>{
-                                        assignValueForm("puesto", e.target.value);
-                                    }}
+                                    onChange={ handleChangeForm }
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={2}>
+                                <TextField
+                                    label="Fecha Ingreso"
+                                    size="small"
+                                    margin="dense"
+                                    type="date"
+                                    fullWidth
+                                    required
+                                    InputLabelProps={{shrink: true}}
+                                    value = {valuesForm?.fecha_ingreso ?? ""}
+                                    name="fecha_ingreso"
+                                    onChange={ handleChangeForm}
                                 />
                             </Grid>
                         </Grid>
@@ -370,9 +367,8 @@ export const FormRegister = () => {
                                     type="tel"
                                     fullWidth
                                     value = {valuesForm?.telefono_referencia ?? ""}
-                                    onChange={ (e)=>{
-                                        assignValueForm("telefono_referencia", e.target.value);
-                                    }}
+                                    name="telefono_referencia"
+                                    onChange={ handleChangeForm }
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6}>
@@ -383,9 +379,8 @@ export const FormRegister = () => {
                                     type="text"
                                     fullWidth
                                     value = {valuesForm?.nombre_familiar ?? ""}
-                                    onChange={ (e)=>{
-                                        assignValueForm("nombre_familiar", e.target.value);
-                                    }}
+                                    name="nombre_familiar"
+                                    onChange={ handleChangeForm}
                                 />
                             </Grid> 
                         </Grid>
@@ -399,9 +394,8 @@ export const FormRegister = () => {
                                     multiline
                                     rows={3}
                                     value = {valuesForm?.direccion ?? ""}
-                                    onChange={ (e)=>{
-                                        assignValueForm("direccion", e.target.value);
-                                    }}
+                                    name="direccion"
+                                    onChange={ handleChangeForm}
                                 />
                             </Grid>
                             <Grid item  xs={12} md={2}>
@@ -413,10 +407,8 @@ export const FormRegister = () => {
                                     select
                                     disabled = { cargandoDeps }
                                     value = { cargandoDeps ? "" : (valuesForm?.departamento_ubigeo ?? "")}
-                                    onChange={ (e)=>{
-                                        assignValueForm("departamento_ubigeo", e.target.value);
-                                        //onListarProvincias({idDepartamento: e.target.value});
-                                    }}
+                                    name="departamento_ubigeo"
+                                    onChange={ handleChangeForm}
                                 >
                                     <MenuItem value=""><em>Seleccionar</em></MenuItem>
                                     {
@@ -433,10 +425,8 @@ export const FormRegister = () => {
                                     select
                                     disabled = { cargandoProvs }
                                     value = {valuesForm?.provincia_ubigeo ?? ""}
-                                    onChange={ (e)=>{
-                                        assignValueForm("provincia_ubigeo", e.target.value);
-                                        //onListarDistritos({idProvincia: e.target.value});
-                                    }}
+                                    name="provincia_ubigeo"
+                                    onChange={ handleChangeForm}
                                 >
                                     <MenuItem value=""><em>Seleccionar</em></MenuItem>
                                     {
@@ -453,9 +443,8 @@ export const FormRegister = () => {
                                     select
                                     disabled = { cargandoDists }
                                     value = {valuesForm?.distrito_ubigeo ?? ""}
-                                    onChange={ (e)=>{
-                                        assignValueForm("distrito_ubigeo", e.target.value);
-                                    }}
+                                    name="distrito_ubigeo"
+                                    onChange={ handleChangeForm}
                                 >
                                     <MenuItem value=""><em>Seleccionar</em></MenuItem>
                                     {
@@ -472,9 +461,8 @@ export const FormRegister = () => {
                                     select
                                     required
                                     value = {valuesForm?.pais ?? "PE"}
-                                    onChange={ (e)=>{
-                                        assignValueForm("pais", e.target.value);
-                                    }}
+                                    name="pais"
+                                    onChange={ handleChangeForm}
                                 >
                                     <MenuItem value=""><em>Seleccionar</em></MenuItem>
                                     <MenuItem value="PE"><em>Perú</em></MenuItem>
@@ -524,7 +512,7 @@ export const FormRegister = () => {
                                                     color="error"
                                                     variant="contained"
                                                     sx = {{pr: 3, pl: 3}}
-                                                    disabled = { !existeContratoValido }
+                                                    disabled = { !existeContratoValido || !Boolean(seleccionado?.id) }
                                                     onClick={(e)=>{
                                                         setIsFinalizandoContrato(true);
                                                     }} 
@@ -543,8 +531,8 @@ export const FormRegister = () => {
                                                     <TableCell sx={{fontWeight: 'bold'}}>F. Fin</TableCell>
                                                     <TableCell sx={{fontWeight: 'bold'}}>Salario</TableCell>
                                                     <TableCell sx={{fontWeight: 'bold'}}>Días Trabajo</TableCell>
-                                                    <TableCell sx={{fontWeight: 'bold'}}>Horas Día</TableCell>
-                                                    <TableCell sx={{fontWeight: 'bold'}}>Costo Día</TableCell>
+                                                    <TableCell sx={{fontWeight: 'bold'}}>Horas Semana</TableCell>
+                                                    <TableCell sx={{fontWeight: 'bold'}}>Costo Hora</TableCell>
                                                     <TableCell sx={{fontWeight: 'bold'}}>Dscto. Planilla</TableCell>
                                                 </TableRow>
                                             </TableHead>
@@ -569,9 +557,9 @@ export const FormRegister = () => {
                                                                 <TableCell title={contrato.observacionesFinContrato ?? "Sin observaciones."}>{contrato.fechaFin ?? "-"}</TableCell>
                                                                 <TableCell align="right">S/ {contrato.salario}</TableCell>
                                                                 <TableCell align="right">{contrato.diasTrabajo}</TableCell>
-                                                                <TableCell align="right">{contrato.horasDia}</TableCell>
-                                                                <TableCell align="right">S/ {contrato.costoDia}</TableCell>
-                                                                <TableCell align="right">S/ {contrato?.descuentoPlanilla}</TableCell>
+                                                                <TableCell align="right">{contrato.horasSemana}</TableCell>
+                                                                <TableCell align="right">S/ {contrato.costoHora}</TableCell>
+                                                                <TableCell align="right">S/ {parseFloat(contrato?.descuentoPlanilla).toFixed(2) || "0.00"}</TableCell>
                                                             </TableRow>
                                                         })
                                                     :   <TableRow>

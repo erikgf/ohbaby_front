@@ -6,15 +6,16 @@ export const usePersonalContrato = () => {
     const dispatch = useDispatch();
     const { openModalContrato, contrato } = useSelector(state=>state.personal);
 
-    const onAgregarContrato = ( { fechaInicio, salario, descuentoPlanilla, idHorario, diasTrabajo, horasDia, costoDia, costoHora }) => {
+    const onAgregarContrato = ( { fechaInicio, salario, descuentoPlanilla, idHorario, diasTrabajo, horasDia, costoDia, costoHora, horasSemana }) => {
         dispatch ( agregarContrato({
             id: new Date().getTime(), 
             backend: false,
             fechaInicio, salario : parseFloat(salario).toFixed(2), 
-            descuentoPlanilla,
+            descuentoPlanilla : descuentoPlanilla === "" ? "0.00" : parseFloat(descuentoPlanilla).toFixed(2),
             idHorario,
             diasTrabajo, horasDia,
-            costoDia, costoHora
+            costoDia, costoHora,
+            horasSemana,
         }) );
     };
 
@@ -23,6 +24,7 @@ export const usePersonalContrato = () => {
     };
 
     const onModificarContrato = ( contrato ) => {
+        console.log({contrato});
         dispatch ( editarContrato( contrato )  );
     };
 

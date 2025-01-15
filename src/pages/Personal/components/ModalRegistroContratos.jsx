@@ -34,10 +34,8 @@ export const ModalRegistroContratos = () => {
 
     useEffect(()=>{
         if (Boolean(contrato?.id)){
-            console.log({contrato})
-            const { id, fechaInicio, descuentoPlanilla, salario, diasTrabajo, horasSemana } = contrato;
-            const [{id: idHorario}] = contrato.horarios;
-
+            const { id, fechaInicio, descuentoPlanilla, salario, diasTrabajo, horasSemana, idHorario } = contrato;
+            //const [{id: idHorario}] = contrato.horarios;
             const { horasDia, costoDia, costoHora } = recalcularCostosDiaHora( salario, diasTrabajo, horasSemana);
 
             resetValueForm({
@@ -140,8 +138,9 @@ export const ModalRegistroContratos = () => {
                         autoFocus
                         fullWidth
                         value = {valuesForm?.descuentoPlanilla ?? "0.00"}
+                        onFocus={(e)=>e.target.select()}
                         onChange={ (e)=>{
-                            assignValueForm("descuentoPlanilla", e.target.value);
+                            assignValueForm("descuentoPlanilla", e.target.value === "" ? "0.00" : e.target.value );
                         }}
                     />
                 </Grid>

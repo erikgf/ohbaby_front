@@ -23,7 +23,7 @@ export const usePersonal = ()=>{
                     fecha_inicio: contrato.fechaInicio,
                     salario: contrato.salario,
                     id_horario: contrato.idHorario,
-                    descuento_planilla: contrato.descuentoPlanilla
+                    descuento_planilla: contrato.descuentoPlanilla === "" ? 0 : contrato.descuentoPlanilla
                 }
             })
         };

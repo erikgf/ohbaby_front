@@ -21,6 +21,7 @@ export const TableManager = ({
       children,
       orderByDefault = 'name',
       minHeight = null,
+      tableWidth = '100%',
       onStyleToRow //= {style, conditional}
     }) => {
 
@@ -97,11 +98,12 @@ export const TableManager = ({
           {children}
         </EnhancedTableToolbar>
         <TableContainer
-            sx={ minHeight ? {minHeight: minHeight, height: minHeight} : { width: 'calc(100% - 32px)', padding: '0px 16px'}}
+            sx={ minHeight ? {minHeight, height: minHeight, overflow: "scroll"} : { width: `calc(100% - 32px)`, padding: '0px 16px', overflow: "scroll"}}
             >
           <Table
             aria-labelledby={tableTitle}
             size='small'
+            sx={{width: tableWidth}}
           >
             <EnhancedTableHead
               isSelectableRows = { isSelectableRows }
