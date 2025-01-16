@@ -15,14 +15,14 @@ const modalTitle = "Agregar Contrato", modalTitleEditar = "Editar Contrato";
 const defaultValuesForm = {
     id: null,
     fechaInicio: "",
-    descuentoPlanilla: "0.00",
+    descuentoPlanilla: "0.000",
     idHorario : null,
-    salario : "0.00",
+    salario : "0.000",
     horasSemana: "0",
     diasTrabajo : Constantes.DIAS_TRABAJO_MENSUAL,
     horasDia: "0",
-    costoDia: "0.00",
-    costoHora: "0.00"
+    costoDia: "0.000",
+    costoHora: "0.000"
 };
 
 export const ModalRegistroContratos = () => {
@@ -137,10 +137,10 @@ export const ModalRegistroContratos = () => {
                         type="number"
                         autoFocus
                         fullWidth
-                        value = {valuesForm?.descuentoPlanilla ?? "0.00"}
+                        value = {valuesForm?.descuentoPlanilla ?? "0.0000"}
                         onFocus={(e)=>e.target.select()}
                         onChange={ (e)=>{
-                            assignValueForm("descuentoPlanilla", e.target.value === "" ? "0.00" : e.target.value );
+                            assignValueForm("descuentoPlanilla", e.target.value === "" ? "0.0000" : e.target.value );
                         }}
                     />
                 </Grid>
@@ -184,7 +184,7 @@ export const ModalRegistroContratos = () => {
                             type="number"
                             fullWidth
                             required
-                            value = {valuesForm?.salario ?? "0.00"}
+                            value = {valuesForm?.salario ?? "0.000"}
                             onChange={ (e)=>{
                                 const salario = e.target.value ?? "0";
                                 const { horasDia, costoDia, costoHora } = recalcularCostosDiaHora( 
@@ -224,7 +224,7 @@ export const ModalRegistroContratos = () => {
                         type="number"
                         fullWidth
                         required
-                        value = {valuesForm?.horasSemana ?? "0.00"}
+                        value = {valuesForm?.horasSemana ?? "0.000"}
                         inputProps={
                             {readOnly: true}
                         }
@@ -254,7 +254,7 @@ export const ModalRegistroContratos = () => {
                         inputProps={
                             {readOnly: true}
                         }
-                        value = {valuesForm?.costoDia ?? "0.00"}
+                        value = {valuesForm?.costoDia ?? "0.000"}
                         />
                 </Grid>
                 <Grid item xs={12} sm={2}>
@@ -267,7 +267,7 @@ export const ModalRegistroContratos = () => {
                         inputProps={
                             {readOnly: true}
                         }
-                        value = {valuesForm?.costoHora ?? "0.00"}
+                        value = {valuesForm?.costoHora ?? "0.000"}
                         />
                 </Grid>
             </Grid>

@@ -56,8 +56,6 @@ export const RegistrarAsitenciaManual = () => {
             guardarRegistro, consultarDatosFecha
           } = useRegistrarAsistenciaManual();
           
-    console.log({data});
-
     return <Container sx={{pt: 3}}>
             <Grid container spacing={2}>
                 <Grid item sm={12} >
@@ -171,40 +169,34 @@ export const RegistrarAsitenciaManual = () => {
                                                                                     />
                                                                             </TableCell>
                                                                             <TableCell>
-                                                                                {
-                                                                                    (item.horas?.length > 1  || item.esActualizando) &&
-                                                                                        <TextField 
-                                                                                            label="Hora Entrada"
-                                                                                            margin="dense"
-                                                                                            size="small"
-                                                                                            type = "time"
-                                                                                            name={`turno_dos_entrada_${item.id}`}
-                                                                                            InputLabelProps={{shrink: true}}
-                                                                                            fullWidth
-                                                                                            inputProps={{
-                                                                                                max: horasTarde?.hora_fin,
-                                                                                            }}
-                                                                                            defaultValue={ horasTarde?.hora_inicio || ""}
-                                                                                        />
-                                                                                }
+                                                                                <TextField 
+                                                                                    label="Hora Entrada"
+                                                                                    margin="dense"
+                                                                                    size="small"
+                                                                                    type = "time"
+                                                                                    name={`turno_dos_entrada_${item.id}`}
+                                                                                    InputLabelProps={{shrink: true}}
+                                                                                    fullWidth
+                                                                                    inputProps={{
+                                                                                        max: horasTarde?.hora_fin,
+                                                                                    }}
+                                                                                    defaultValue={ horasTarde?.hora_inicio || ""}
+                                                                                />
                                                                             </TableCell>
                                                                             <TableCell>
-                                                                                {
-                                                                                    (item.horas?.length > 1  || item.esActualizando) &&
-                                                                                        <TextField 
-                                                                                            label="Hora Salida"
-                                                                                            margin="dense"
-                                                                                            size="small"
-                                                                                            type = "time"
-                                                                                            name={`turno_dos_salida_${item.id}`}
-                                                                                            InputLabelProps={{shrink: true}}
-                                                                                            fullWidth
-                                                                                            inputProps={{
-                                                                                                max: horasTarde?.hora_fin,
-                                                                                            }}
-                                                                                            defaultValue={ horasTarde?.hora_fin || ""}
-                                                                                        />
-                                                                                }
+                                                                                    <TextField 
+                                                                                        label="Hora Salida"
+                                                                                        margin="dense"
+                                                                                        size="small"
+                                                                                        type = "time"
+                                                                                        name={`turno_dos_salida_${item.id}`}
+                                                                                        InputLabelProps={{shrink: true}}
+                                                                                        fullWidth
+                                                                                        inputProps={{
+                                                                                            max: horasTarde?.hora_fin,
+                                                                                        }}
+                                                                                        defaultValue={ horasTarde?.hora_fin || ""}
+                                                                                    />
                                                                             </TableCell>
                                                                             <TableCell align="center" sx={{fontWeight: "bold"}}>
                                                                                 <Checkbox inputProps = {{ 'aria-label': 'Faltó' }} 

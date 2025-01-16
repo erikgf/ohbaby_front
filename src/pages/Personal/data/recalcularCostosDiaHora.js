@@ -1,9 +1,12 @@
+const DECIMALES = 3;
+const CERO = "0.000";
+
 export const recalcularCostosDiaHora = ( salario, diasTrabajo, horasSemana) => {
     const diasEnSemana = 6;
     if (diasTrabajo == 0){
         return {
-            costoDia: "0.00",
-            costoHora: "0.00",
+            costoDia: CERO,
+            costoHora: CERO,
         };
     }
 
@@ -12,17 +15,17 @@ export const recalcularCostosDiaHora = ( salario, diasTrabajo, horasSemana) => {
 
     if (horasSemana == 0){
         return {
-            costoDia : parseFloat(costoDia).toFixed(2),
-            costoHora: "0.00",
-            horasDia : "0.00"
+            costoDia : parseFloat(costoDia).toFixed(DECIMALES),
+            costoHora: CERO,
+            horasDia : CERO
         };
     }
 
-    const costoHora = parseFloat(sueldoSemanal / horasSemana).toFixed(2);
-    const horasDia = parseFloat(horasSemana / diasEnSemana).toFixed(2);
+    const costoHora = parseFloat(sueldoSemanal / horasSemana).toFixed(DECIMALES);
+    const horasDia = parseFloat(horasSemana / diasEnSemana).toFixed(DECIMALES);
 
     return {
-        costoDia : parseFloat(costoDia).toFixed(2),
+        costoDia : parseFloat(costoDia).toFixed(DECIMALES),
         costoHora, horasDia
     };
 };

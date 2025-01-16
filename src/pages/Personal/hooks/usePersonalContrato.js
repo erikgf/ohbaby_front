@@ -10,8 +10,9 @@ export const usePersonalContrato = () => {
         dispatch ( agregarContrato({
             id: new Date().getTime(), 
             backend: false,
-            fechaInicio, salario : parseFloat(salario).toFixed(2), 
-            descuentoPlanilla : descuentoPlanilla === "" ? "0.00" : parseFloat(descuentoPlanilla).toFixed(2),
+            fechaInicio, 
+            salario : parseFloat(salario).toFixed(3), 
+            descuentoPlanilla : descuentoPlanilla === "" ? "0.000" : parseFloat(descuentoPlanilla).toFixed(3),
             idHorario,
             diasTrabajo, horasDia,
             costoDia, costoHora,

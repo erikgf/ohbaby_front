@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import useNotification from './hooks/useNotification';
 import { useUI } from './hooks';
 
-const mantenimiento = true;
+const mantenimiento = false;
 
 function App() {
   const {  mensaje, onLimpiarMensaje } = useUI();
