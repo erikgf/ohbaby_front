@@ -1,10 +1,12 @@
 import { Route, Routes } from 'react-router-dom';
 import { RequireAuth } from './components';
 import './App.css';
-import { Entregas, Horario, HorarioPersonal, ImprimirAsistenciaManual, Login, MarcarAsistencia, Personal, Principal, RegistrarAsitenciaManual, ReporteAsistenciaRegistro, TipoEntregas, Usuarios } from './pages';
+import { AppEnMantenimiento, Entregas, Horario, HorarioPersonal, ImprimirAsistenciaManual, Login, MarcarAsistencia, Personal, Principal, RegistrarAsitenciaManual, ReporteAsistenciaRegistro, TipoEntregas, Usuarios } from './pages';
 import { useEffect } from 'react';
 import useNotification from './hooks/useNotification';
 import { useUI } from './hooks';
+
+const mantenimiento = true;
 
 function App() {
   const {  mensaje, onLimpiarMensaje } = useUI();
@@ -17,6 +19,12 @@ function App() {
         onLimpiarMensaje();
       }
   }, [mensaje]);
+
+  if (mantenimiento){
+    return   <Routes>
+        <Route path="*" element={<AppEnMantenimiento />} />
+      </Routes>  
+  }
 
   return   <Routes>
               {/* Public */}
