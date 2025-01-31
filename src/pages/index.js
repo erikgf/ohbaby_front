@@ -11,3 +11,4 @@ export * from './ImprimirAsistenciaManual/ImprimirAsistenciaManual';
 export * from './TipoEntregas/TipoEntregas';
 export * from './Usuarios/Usuarios';
 export * from './ReporteAsistenciasRegistro/ReporteAsistenciaRegistro';
+export * from './AsistenciaEmpleados/AsistenciaEmpleados';

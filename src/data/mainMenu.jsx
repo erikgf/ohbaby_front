@@ -55,11 +55,17 @@ const mainMenu = [
                 icon: EventIcon
             },
             {
+                name: "Asistencia Empleados ",
+                url: "/asistencia-empleados",
+                icon: TouchAppIcon
+            }
+            
+            /*
+            {
                 name: "Registrar Asistencia Manual",
                 url: "/registrar-asistencia-manual",
                 icon: TouchAppIcon
             },
-            /*
             {
                 name: "Marcar Asistencia",
                 url: "/marcar-asistencia",

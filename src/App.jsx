@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 import { RequireAuth } from './components';
 import './App.css';
-import { AppEnMantenimiento, Entregas, Horario, HorarioPersonal, ImprimirAsistenciaManual, Login, MarcarAsistencia, Personal, Principal, RegistrarAsitenciaManual, ReporteAsistenciaRegistro, TipoEntregas, Usuarios } from './pages';
+import { AppEnMantenimiento, AsistenciaEmpleados, Entregas, Horario, HorarioPersonal, ImprimirAsistenciaManual, Login, MarcarAsistencia, Personal, Principal, RegistrarAsitenciaManual, ReporteAsistenciaRegistro, TipoEntregas, Usuarios } from './pages';
 import { useEffect } from 'react';
 import useNotification from './hooks/useNotification';
 import { useUI } from './hooks';
@@ -39,6 +39,7 @@ function App() {
                 <Route path="/horarios-personal" element={<HorarioPersonal />} />
                 <Route path="/marcar-asistencia" element={<MarcarAsistencia />} />
                 <Route path="/registrar-asistencia-manual" element={<RegistrarAsitenciaManual />} />
+                <Route path="/asistencia-empleados" element={<AsistenciaEmpleados />} />
                 <Route path="/entregas" element={<Entregas />} />
                 <Route path="/imprimir-asistencia-manual" element={<ImprimirAsistenciaManual />} />
                 <Route path="/reporte-asistencias-registro" element={<ReporteAsistenciaRegistro />} />

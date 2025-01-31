@@ -1,7 +1,7 @@
 import { Box, Grid, MenuItem, TextField, } from "@mui/material";
 import useConfirm from "../../../hooks/useConfirm";
 import { styles } from "../../../assets/styles";
-import { MdAddCircle as AddCircleIcon, MdEdit as EditIcon, MdDelete as DeleteIcon, MdRefresh as RefreshIcon} from "react-icons/md";
+import { MdAddCircle as AddCircleIcon, MdEdit as EditIcon, MdDelete as DeleteIcon, MdRefresh as RefreshIcon, MdAddToPhotos as MassiveIcon, MdCloudDownload as ExportIcon} from "react-icons/md";
 import { TableManager } from "../../../components";
 import { usePersonal } from "../hooks/usePersonal";
 import { useEffect, useState } from "react";
@@ -10,9 +10,10 @@ import { useEmpresasBean } from "../../../hooks";
 
 const tableTitle = "Gestionar Personal";
 
-export const ListaPersonal = () => {
+export const ListaPersonal = ({onOpenImportador}) => {
     const { registros, cargandoRegistros, cargandoEliminar, cargandoSeleccionado, 
-        onListar, onEliminarRegistro, onNuevoRegistro, onLeerRegistro} = usePersonal();
+            cargandoRegistrosExportar,
+            onListar, onEliminarRegistro, onNuevoRegistro, onLeerRegistro, onListarExportar} = usePersonal();
     const { data : listaEmpresas } = useEmpresasBean();
     const [empresaFiltro, setEmpresaFiltro] = useState("X");
     const { confirm } = useConfirm();
@@ -35,6 +36,10 @@ export const ListaPersonal = () => {
             return;
         }
     };
+    
+    const onPrepareRegistroMasivo = () => {
+        onOpenImportador();
+    };
 
     useEffect(()=>{
         onListar(empresaFiltro);
@@ -53,6 +58,25 @@ export const ListaPersonal = () => {
                         tableWidth = "1400px"
                         strechTable = { true }
                         onActions = {[
+                            {
+                                inRows: false, 
+                                inToolbar: true, 
+                                noSelection: true, onOnlySelection: false,
+                                onLoading: cargandoRegistrosExportar,
+                                onClick : ()=>{
+                                    onListarExportar(empresaFiltro);
+                                },
+                                title : 'Exportar',
+                                icon : <ExportIcon />
+                            },
+                            {
+                                inRows: false, 
+                                inToolbar: true, 
+                                noSelection: true, onOnlySelection: false,
+                                onClick : onPrepareRegistroMasivo,
+                                title : 'Registro Masivo',
+                                icon : <MassiveIcon/>
+                            },
                             {
                                 inRows: false, inToolbar: true, noSelection: true, onOnlySelection: false,
                                 onClick : () => {onListar(empresaFiltro)},

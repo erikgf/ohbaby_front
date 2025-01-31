@@ -2,7 +2,7 @@ import mensajes from "../../data/mensajes";
 import { finalizarContrato } from "../../services/personal";
 import { getPersonal, insertPersonal, getPersonals, deletePersonal, updatePersonal } from "../../services/personal/crud";
 import { setMessage, setMessageError } from "../ui/uiSlice";
-import { finallyFinalizarContrato, finallyLeer, finallyListar, okEliminar, okFinalizarContrato, okGuardar, okLeer, okListar, startEliminar, startFinalizarContrato, startGuardar, startLeer, startListar } from "./personalSlice";
+import { finallyFinalizarContrato, finallyLeer, finallyListar, finallyListarExportar, okEliminar, okFinalizarContrato, okGuardar, okLeer, okListar, okListarExportar, startEliminar, startFinalizarContrato, startGuardar, startLeer, startListar, startListarExportar } from "./personalSlice";
 
 export const startingListar = ({empresaFiltro})=>{
     return async ( dispatch )=>{
@@ -93,3 +93,18 @@ export const startingFinalizarContrato = ({ id, fechaCese, razonCese })=>{ //idC
     }
 };
 
+
+export const startingListarExportar = ({empresaFiltro})=>{
+    return async ( dispatch )=>{
+        dispatch( startListarExportar() );
+        try {
+            const data = await getPersonals({empresaFiltro});
+            dispatch( okListarExportar(data) );
+        } catch (error) {
+            console.error({error});
+            dispatch(setMessageError(error));
+        } finally{
+            dispatch(finallyListarExportar());
+        }
+    }
+};

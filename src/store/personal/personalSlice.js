@@ -36,7 +36,9 @@ export const personalSlice = createSlice({
         cargandoSeleccionado: false,
         openModal: false,
         openModalContrato: false,
-        contrato : null
+        contrato : null,
+        cargandoRegistrosExportar: false,
+        registrosExportar: null
    },
    reducers : {
         startListar : (state) =>{
@@ -48,6 +50,16 @@ export const personalSlice = createSlice({
         },
         finallyListar: (state) => {
             state.cargandoRegistros = false;
+        },
+        startListarExportar : (state) =>{
+            state.cargandoRegistrosExportar = true;
+            state.registrosExportar = null;
+        },
+        okListarExportar : (state, {payload})=>{
+            state.registrosExportar = payload;
+        },
+        finallyListarExportar: (state) => {
+            state.cargandoRegistrosExportar = false;
         },
         startNuevoRegistro : (state) => {
             state.seleccionado = defaultRegistro;
@@ -169,6 +181,9 @@ export const personalSlice = createSlice({
         },
         finallyFinalizarContrato : ( state ) => {
             state.cargandoFinalizarContrato = false;
+        },
+        clearRegistrosExportar : ( state ) => {
+            state.registrosExportar = null;
         }
 
    }
@@ -178,6 +193,9 @@ export const {
     startListar,
     okListar,
     finallyListar,
+    startListarExportar,
+    okListarExportar,
+    finallyListarExportar,
     nuevoRegistro,
     startLeer,
     okLeer,
@@ -197,5 +215,6 @@ export const {
     cerrarContrato,
     startFinalizarContrato,
     okFinalizarContrato,
-    finallyFinalizarContrato
+    finallyFinalizarContrato,
+    clearRegistrosExportar
 } = personalSlice.actions;

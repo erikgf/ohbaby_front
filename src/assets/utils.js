@@ -86,3 +86,9 @@ export const getSimpleRound = (number, float = 1) => {
     const multiplicadorDecimal = Math.pow(10, float);
     return Math.round(number * multiplicadorDecimal) / multiplicadorDecimal;
 };
+
+export const getDateFormattedToRaw = (dateString, separator = "/") => {
+    if (!dateString) return null;
+    const [day, month, year] = dateString.split(separator);
+    return `${year}-${month}-${day}`;
+}

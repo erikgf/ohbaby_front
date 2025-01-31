@@ -7,7 +7,8 @@ export const AutocompleteOnline = ({
     items = [],
     disabled = false,
     required = false,
-    label
+    label,
+    autoFocus
 }) => {
    return <Autocomplete
                     value={ value }
@@ -33,6 +34,6 @@ export const AutocompleteOnline = ({
                     getOptionLabel = {(option) => (option ? `${option.descripcion}` : "")}
                     options={ items||[]}
                     fullWidth
-                    renderInput={(params) => <TextField {...params} required={required} label={label} />}
+                    renderInput={(params) => <TextField {...params} required={required} autoFocus = { Boolean(autoFocus) } label={label} />}
                     />
 }
