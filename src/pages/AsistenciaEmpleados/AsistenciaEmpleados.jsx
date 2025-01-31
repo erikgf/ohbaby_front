@@ -1,4 +1,4 @@
-import { Card, CardContent, Container, Divider, Grid, LinearProgress, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from "@mui/material";
+import { Card, CardContent, Container, Divider, Grid, LinearProgress, Table, TableBody, TableCell, TableHead, TableRow, TextField } from "@mui/material";
 import { MdDelete, MdSave } from "react-icons/md";
 import { useBuscarPersonalFecha } from "./useBuscarPersonalFecha";
 import { useEffect, useRef, useState } from "react";
@@ -12,22 +12,13 @@ export const AsistenciaEmpleados = () => {
     const [ fecha, setFecha ] = useState("");
     const [ empleado, setEmpleado ] = useState(null);
     const { data : listaEmpleados, loading: cargandoEmpleados, setSearchTerm : setBuscarTermEmpleado } = useBuscarPersonalFecha(fecha);
-    const { data : registrosEmpleado, cargando, cargandoGuardar, guardarRegistro, consultarAsistenciaDia} = useAsistenciaEmpleados();
-
-    useEffect(()=>{
-        
-    }, [empleado]);
+    const { data : registrosEmpleado, cargando, cargandoGuardar, guardarRegistro, consultarAsistenciaDia, eliminarAsistenciaRegistro} = useAsistenciaEmpleados();
 
     useEffect(()=>{
         if (Boolean(fecha)){
             consultarAsistenciaDia(fecha);
         }
-        
     }, [fecha]);
-
-    console.log({
-        registrosEmpleado
-    })
 
     return  <Container sx={{pt: 3}}>
                 <Grid container spacing={2}>
@@ -164,7 +155,7 @@ export const AsistenciaEmpleados = () => {
                                                                     { registro.total_horas }
                                                                 </TableCell>
                                                                 <TableCell>
-                                                                    <LoadingButton type="button" size="large" variant="contained" color="error" loading={registro?._eliminando}><MdDelete /></LoadingButton>
+                                                                    <LoadingButton onClick={()=>eliminarAsistenciaRegistro(registro.id)} type="button" size="large" variant="contained" color="error" loading={registro?._eliminando}><MdDelete /></LoadingButton>
                                                                 </TableCell>
                                                         </TableRow>
                                                 })

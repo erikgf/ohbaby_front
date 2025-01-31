@@ -5,5 +5,5 @@ export const consultarSueldos = async ({fechaInicio, fechaFin}) => {
         desde: fechaInicio, hasta: fechaFin,
     });
 
-    return await axiosPrivate.get(`/reporte-asistencia-registros/sueldos?${paramsData.toString()}`);
+    return await axiosPrivate.get(`/reporte-asistencia-empleados/sueldos?${paramsData.toString()}`);
 };

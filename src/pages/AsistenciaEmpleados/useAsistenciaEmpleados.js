@@ -2,62 +2,7 @@ import { useState } from "react";
 import { setMessage, setMessageError } from "../../store/ui/uiSlice";
 import { useDispatch } from "react-redux";
 import mensajes from "../../data/mensajes";
-import { getAsistenciaDia, storeAsistencia } from "@/services/asistenciaEmpleados/crud";
-
-const procesarData = (data) => {
-    const { horarios, registros, numero_dia } = data;
-
-    return registros?.map( empresa  => { 
-        return {
-            ...empresa,
-            registros: empresa?.registros.map ( _registro => {
-                const registroAsistencia = _registro?.asistencia;
-                const esEdicion = Boolean(registroAsistencia);
-        
-                if (esEdicion){
-                    const horas = [];
-                    if (registroAsistencia?.hora_entrada_mañana){
-                        horas.push({
-                            hora_inicio: registroAsistencia.hora_entrada_mañana,
-                            hora_fin: registroAsistencia?.hora_salida_mañana
-                        });
-                    }
-        
-                    if (registroAsistencia?.hora_entrada_tarde){
-                        horas.push({
-                            hora_inicio: registroAsistencia.hora_entrada_tarde,
-                            hora_fin: registroAsistencia?.hora_salida_tarde
-                        });
-                    }
-        
-                    return {
-                        ..._registro,
-                        horas,
-                        esActualizando: true,
-                        falto: false
-                    };
-                }
-        
-                const horas = horarios.find( 
-                    horario => horario.id === _registro.horario_id
-                    )
-                    ?.horario_detalles
-                    ?.filter( horario_detalle => horario_detalle.dias.includes(String(numero_dia)))
-                    ?.map ( horario_detalle => ({
-                        hora_inicio: horario_detalle.hora_inicio,
-                        hora_fin: horario_detalle.hora_fin
-                    }));
-        
-                return {
-                    ..._registro,
-                    horas,
-                    esActualizando: false,
-                    falto: esEdicion
-                };
-            })
-        };
-    });
-};
+import { deleteAsistencia, getAsistenciaDia, storeAsistencia } from "@/services/asistenciaEmpleados/crud";
 
 export const useAsistenciaEmpleados = () =>{
     const dispatch = useDispatch();
@@ -100,11 +45,25 @@ export const useAsistenciaEmpleados = () =>{
         }
     };
 
+    const eliminarAsistenciaRegistro = async (id) => {
+        setData( prev => prev.map( item => item.id === id ? {...item, _eliminando: true} : item));
+        try {
+            await deleteAsistencia(id);
+
+            setData( prev => prev.filter( item => item.id != id));
+        } catch (error) {
+            dispatch(setMessageError(error));
+        } finally {
+            setData( prev => prev.map( item => item.id === id ? {...item, _eliminando: false} : item));
+        }
+    };
+
     return {
         data,
         cargando,
         cargandoGuardar,
         guardarRegistro,
-        consultarAsistenciaDia
+        consultarAsistenciaDia,
+        eliminarAsistenciaRegistro
     }
 }

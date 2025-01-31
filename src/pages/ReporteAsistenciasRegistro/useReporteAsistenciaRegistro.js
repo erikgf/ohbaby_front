@@ -14,10 +14,8 @@ const columnasWorksheets = {
     asistencias: [
         { key : "fecha", header: "FECHA", style: { numFmt : formatDate }},
         { key : "codigo_unico", header: "PERSONAL"},
-        { key : "hora_entrada_mañana", header: "HORA ENTRADA MAÑANA"},
-        { key : "hora_salida_mañana", header: "HORA SALIDA MAÑANA"},
-        { key : "hora_entrada_tarde", header: "HORA ENTRADA TARDE"},
-        { key : "hora_salida_tarde", header: "HORA SALIDA TARDE"},
+        { key : "hora_entrada", header: "HORA ENTRADA"},
+        { key : "hora_salida", header: "HORA SALIDA"},
         { key : "total_horas", header: "TOTAL HORAS", style : { numFmt : formatNumber}},
     ],
     sueldos: [
@@ -51,7 +49,6 @@ const _procesarColumnasSueldos = (colSueldosOriginal, colFechas) => {
     const colSueldosOriginalCopia = [...colSueldosOriginal];
     const posicionColumnKeyTotalPagar = colSueldosOriginalCopia.findIndex( item => item.key === "total_pagar");
     const cantidadFechas = colFechas.length;
-    console.log({posicionColumnKeyTotalPagar, cantidadFechas, x: _abecedario[posicionColumnKeyTotalPagar + cantidadFechas + 1]});
     const primeraLetraAdelantosTotal = _abecedario[posicionColumnKeyTotalPagar + 1];
     const ultimaLetraAdelantosTotal = _abecedario[posicionColumnKeyTotalPagar + cantidadFechas + 1];
     const letraTotalPagar = _abecedario[posicionColumnKeyTotalPagar];
@@ -120,10 +117,8 @@ export const useReporteAsistenciaRegistro = () => {
             return {
                 fecha: item.fecha,
                 codigo_unico: item.empleado_base?.codigo_unico,
-                hora_entrada_mañana: item.hora_entrada_mañana,
-                hora_salida_mañana: item.hora_salida_mañana,
-                hora_entrada_tarde: item.hora_entrada_tarde,
-                hora_salida_tarde: item.hora_salida_tarde,
+                hora_entrada: item.hora_entrada,
+                hora_salida: item.hora_salida,
                 total_horas: item.total_horas ?? 0
             };
         });

@@ -46,8 +46,8 @@ export const ReporteAsistenciaRegistro = () => {
                         />
                 </Grid>
                 <Grid item sm={12} md={2}>
-                    <FormControlLabel control={<Checkbox checked={isAsistencia}  onChange={(e)=>{setIsAsistencia(e.target.checked)}}/>} label="Asistencia" />
-                    <FormControlLabel control={<Checkbox checked={isSueldo} onChange={(e)=>{setIsSueldo(e.target.checked)}}/>} label="Sueldos" />
+                    <FormControlLabel sx={{ '& .MuiFormControlLabel-label': { color: '#213547' } }} control={<Checkbox checked={isAsistencia}  onChange={(e)=>{setIsAsistencia(e.target.checked)}}/>} label="Asistencia" />
+                    <FormControlLabel sx={{ '& .MuiFormControlLabel-label': { color: '#213547' } }}  control={<Checkbox checked={isSueldo} onChange={(e)=>{setIsSueldo(e.target.checked)}}/>} label="Sueldos" />
                 </Grid>
                 <Grid item sm={12} md={2}>
                     <LoadingButton loading={cargando} disabled={Boolean(!isAsistencia && !isSueldo)} type="submit" variant="contained" color="success" endIcon={<ExcelIcon />}>GENERAR EXCEL</LoadingButton>
