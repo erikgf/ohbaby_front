@@ -225,8 +225,7 @@ export const FormRegister = () => {
                                     type="number"
                                     required
                                     value = {valuesForm?.numero_orden ?? ""}
-                                    name = "numero_orden"
-                                    onChange={ handleChangeForm }
+                                    inputProps={ { maxLength: 3, readOnly: true }}
                                 />
                             </Grid>
                             <Grid item xs={12} sm={4}>
