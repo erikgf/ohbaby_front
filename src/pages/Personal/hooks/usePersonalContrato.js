@@ -1,12 +1,21 @@
 import { useDispatch, useSelector } from "react-redux";
 import { agregarContrato, cerrarContrato, editarContrato, eliminarContrato, leerContrato, setContratos } from "../../../store/personal/personalSlice";
 import { startingFinalizarContrato } from "../../../store/personal/personalThunks";
+import mensajes from "@/data/mensajes";
 
 export const usePersonalContrato = () => {
     const dispatch = useDispatch();
-    const { openModalContrato, contrato } = useSelector(state=>state.personal);
+    const { openModalContrato, seleccionado, contrato } = useSelector(state=>state.personal);
 
     const onAgregarContrato = ( { fechaInicio, salario, descuentoPlanilla, idHorario, diasTrabajo, horasDia, costoDia, costoHora, horasSemana }) => {
+        if ( seleccionado?.contratos?.length > 0){
+            const [ contrato ] = seleccionado?.contratos;
+            if (contrato?.fechaFin > fechaInicio){
+                alert(mensajes.PERSONA_FECHA_CONTRATO_INICIO_DEBE_SER_MAYOR_QUE_ULTIMO_CONTRATO);
+                return;
+            }
+        }
+
         dispatch ( agregarContrato({
             id: new Date().getTime(), 
             backend: false,

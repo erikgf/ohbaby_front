@@ -152,7 +152,7 @@ export const AsistenciaEmpleados = () => {
                                                                     { registro.hora_salida }
                                                                 </TableCell>
                                                                 <TableCell align="center" >
-                                                                    { registro.total_horas }
+                                                                    { parseFloat(registro.total_horas).toFixed(2) }
                                                                 </TableCell>
                                                                 <TableCell>
                                                                     <LoadingButton onClick={()=>eliminarAsistenciaRegistro(registro.id)} type="button" size="large" variant="contained" color="error" loading={registro?._eliminando}><MdDelete /></LoadingButton>

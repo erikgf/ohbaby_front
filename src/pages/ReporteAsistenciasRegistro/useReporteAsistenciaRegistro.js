@@ -146,7 +146,7 @@ export const useReporteAsistenciaRegistro = () => {
                 costo_horas: item?.costo_hora,
                 total_pagar: item?.salario,
                 ...adelantos,
-                descuento_planilla: item?.descuento_planilla,
+                descuento_planilla: parseFloat(item?.descuento_planilla),
                 adicional_dif: "",
                 t_adel_b: "",
                 neto_pagar: "",

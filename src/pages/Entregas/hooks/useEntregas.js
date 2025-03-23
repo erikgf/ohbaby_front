@@ -20,18 +20,16 @@ export const useEntregas = ()=>{
     const onGuardarRegistro = async (dataForm)=>{
         if (seleccionado?.isEditando){
             const [registroEditar] = dataForm.cuotas;
-            console.log({dataForm})
             dispatch(startingGuardar({
                 dataForm: {
                     id_tipo_entrega: dataForm.tipo_entrega.id,
-                    id_empleado_contrato: dataForm.empleado_contrato?.id,
+                    id_empleado_contrato: dataForm.empleado_contrato?.contrato?.id,
                     ...registroEditar
                 },
                 id: registroEditar.id
             }));
             return;
         }
-
         dispatch(startingGuardar({
             dataForm: {
                 id_tipo_entrega: dataForm.tipo_entrega.id,

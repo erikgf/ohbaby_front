@@ -58,9 +58,6 @@ export const entregaSlice = createSlice({
                     monto_cuota : seleccionado.monto_registrado
                 }]
             };
-
-            console.log({s: state.seleccionado});;
-
             state.openModal = true;
         },
         finallyLeer : (state) => {

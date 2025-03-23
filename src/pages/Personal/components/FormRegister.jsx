@@ -30,7 +30,8 @@ export const FormRegister = () => {
     const titleModal = useMemo(()=>{
         return `${ !Boolean( seleccionado?.id ) ? 'Nuevo' : 'Editando'} Personal`;
     }, [seleccionado]);
-    const puedoAgregarNuevoContrato = Boolean(!valuesForm?.contratos?.length || valuesForm?.contratos?.find( c => Boolean(c.fechaFin)));
+
+    const puedoAgregarNuevoContrato = Boolean(valuesForm?.contratos?.filter( c => !Boolean(c.fechaFin))?.length < 1) || (valuesForm?.contratos?.length <= 0);
     const existeContratoValido = valuesForm?.contratos?.find( c => !Boolean(c.fechaFin));
     
     const handleFinalizarContrato = async ( { fechaFinalizacion, observacionFinalizacion } ) =>{
